@@ -4,7 +4,7 @@
 	"minimum-stability": "stable",
 	"license": "MIT",
 	"require": {
-		"php": ">=7.4",
+		"php": ">=7.4 || ^8.0",
 		"tenantcloud/php-standard": "^1.2",
 		"illuminate/support": "^8.0",
 		"spatie/laravel-fractal": "^5.4",
