@@ -12,7 +12,7 @@ use Tests\TestCase;
  */
 class IncludesTest extends TestCase
 {
-	public function testSetOriginalIncludesInConstructor()
+	public function testSetOriginalIncludesInConstructor(): void
 	{
 		$originalIncludes = [
 			'test',
@@ -25,7 +25,7 @@ class IncludesTest extends TestCase
 		$this->assertSame($originalIncludes, $includesObj->all());
 	}
 
-	public function testAddValidatedIncludes()
+	public function testAddValidatedIncludes(): void
 	{
 		$key = 'key';
 		$includesObj = new Includes();
@@ -39,7 +39,7 @@ class IncludesTest extends TestCase
 		$this->assertFalse(count($includesObj->getValidatedIncludes()) > count(array_unique($includesObj->getValidatedIncludes())));
 	}
 
-	public function testGetValidatedIncludes()
+	public function testGetValidatedIncludes(): void
 	{
 		$key = 'key';
 		$key1 = 'key1';

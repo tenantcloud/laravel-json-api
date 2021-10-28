@@ -3,14 +3,12 @@
 namespace TenantCloud\JsonApi;
 
 use App\Http\Controllers\ControllerTraits\ApiTrait;
-use TenantCloud\JsonApi\Interfaces\Context;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection as SupportCollection;
-use Illuminate\Support\Str;
 use Illuminate\Support\Traits\ForwardsCalls;
 use League\Fractal\Manager;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
@@ -19,19 +17,14 @@ use League\Fractal\Resource\Item;
 use League\Fractal\Resource\NullResource;
 use League\Fractal\Serializer\JsonApiSerializer;
 use League\Fractal\TransformerAbstract;
+use TenantCloud\JsonApi\Interfaces\Context;
 use Tests\JsonApiResponseTest;
 
 /**
- * Class JsonResponse
- *
  * @see JsonApiResponseTest
- *
- * @method self respondWithStatusUpdated()
- * @method self respondWithStatusCreated()
  */
 class JsonApiResponse implements Responsable
 {
-	use ApiTrait;
 	use ForwardsCalls;
 
 	/** @var mixed */
@@ -46,7 +39,7 @@ class JsonApiResponse implements Responsable
 	/** @var Context */
 	protected $context;
 
-	protected string $responseMethod = '';
+	protected int $responseCode = 200;
 
 	public function __construct($items, TransformerAbstract $transformer)
 	{
@@ -54,23 +47,19 @@ class JsonApiResponse implements Responsable
 		$this->transformer = $transformer;
 	}
 
-	public function __call($name, $arguments)
-	{
-		if (Str::startsWith($name, 'respondWithStatus')) {
-			$this->responseMethod = mb_substr($name, 17);
-
-			return $this;
-		}
-
-		$this->forwardCallTo($this, $name, $arguments);
-	}
-
 	/**
 	 * @param Request $request
 	 */
 	public function toResponse($request): JsonResponse
 	{
-		return $this->forwardCallTo($this, $this->getResponseMethod(), [$this->serialize()]);
+		return response()->json($this->serialize(), $this->responseCode);
+	}
+
+	public function setResponseCode(int $responseCode): self
+	{
+		$this->responseCode = $responseCode;
+
+		return $this;
 	}
 
 	public function serialize(): array

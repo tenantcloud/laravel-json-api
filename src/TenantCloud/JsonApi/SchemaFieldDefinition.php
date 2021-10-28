@@ -2,8 +2,8 @@
 
 namespace TenantCloud\JsonApi;
 
-use TenantCloud\JsonApi\Interfaces\Context;
 use Illuminate\Support\Arr;
+use TenantCloud\JsonApi\Interfaces\Context;
 
 /**
  * Class SchemaFieldDefinition

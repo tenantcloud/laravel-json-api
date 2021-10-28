@@ -12,10 +12,8 @@ use Tests\AttributeContext\FieldsTest;
  */
 class Fields
 {
-	/** @var array */
 	private array $originalFields;
 
-	/** @var array */
 	private array $validatedFields = [];
 
 	public function __construct(array $fields)

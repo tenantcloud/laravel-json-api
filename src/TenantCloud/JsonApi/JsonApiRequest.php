@@ -2,26 +2,23 @@
 
 namespace TenantCloud\JsonApi;
 
-use TenantCloud\JsonApi\DTO\ApiRequestDTO;
-use TenantCloud\JsonApi\Interfaces\Context;
-use TenantCloud\JsonApi\Interfaces\Schema;
-use App\Validation\Rules\JsonApiIncludesRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use TenantCloud\JsonApi\DTO\ApiRequestDTO;
+use TenantCloud\JsonApi\Interfaces\Context;
+use TenantCloud\JsonApi\Interfaces\Schema;
+use TenantCloud\JsonApi\Validation\Rules\JsonApiIncludesRule;
 
 /**
  * Class JsonApiRequest
  */
 abstract class JsonApiRequest extends FormRequest
 {
-	/** @var array */
 	protected array $availableIncludes = [];
 
-	/** @var array */
 	protected array $availableFilters = [];
 
-	/** @var array */
 	protected array $availableSorts = [];
 
 	protected ?Schema $schema;

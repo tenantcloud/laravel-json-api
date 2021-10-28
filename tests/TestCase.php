@@ -22,12 +22,4 @@ class TestCase extends BaseTestCase
 			$this->assertArrayNotHasKey($key, $item);
 		}
 	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	protected function defineDatabaseMigrations(): void
-	{
-		$this->loadMigrationsFrom(__DIR__ . '/Database/Migrations');
-	}
 }

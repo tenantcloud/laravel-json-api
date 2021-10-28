@@ -5,16 +5,12 @@ namespace TenantCloud\JsonApi\AttributeContext;
 use Tests\AttributeContext\IncludesTest;
 
 /**
- * Class Includes
- *
  * @see IncludesTest
  */
 class Includes
 {
-	/** @var array */
 	private array $originalIncludes;
 
-	/** @var array */
 	private array $validatedIncludes = [];
 
 	public function __construct(array $includes = [])
@@ -39,7 +35,7 @@ class Includes
 
 	public function addValidated(string $key): self
 	{
-		if (in_array($key, $this->validatedIncludes)) {
+		if (in_array($key, $this->validatedIncludes, true)) {
 			return $this;
 		}
 

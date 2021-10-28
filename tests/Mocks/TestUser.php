@@ -24,7 +24,8 @@ class TestUser
 	public function toArray(): array
 	{
 		return [
-			'id' => $this->id,
+			'id'      => $this->id,
+			'name'    => $this->name,
 			'isValid' => $this->isValid(),
 		];
 	}

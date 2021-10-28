@@ -2,14 +2,14 @@
 
 namespace TenantCloud\JsonApi;
 
+use Exception;
+use Illuminate\Support\Arr;
+use InvalidArgumentException;
 use TenantCloud\JsonApi\Exceptions\DuplicateSchemaFieldDefinitionException;
 use TenantCloud\JsonApi\Exceptions\IncludeDoesNotAuthorized;
 use TenantCloud\JsonApi\Exceptions\SchemaIncludeDoesNotExistException;
 use TenantCloud\JsonApi\Interfaces\Context;
 use TenantCloud\JsonApi\Interfaces\Schema;
-use Exception;
-use Illuminate\Support\Arr;
-use InvalidArgumentException;
 
 /**
  * Class BaseSchema

@@ -2,36 +2,31 @@
 
 namespace Tests;
 
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Arr;
 use TenantCloud\JsonApi\DTO\ApiRequestDTO;
 use TenantCloud\JsonApi\JsonApiResponse;
 use TenantCloud\JsonApi\RequestContext;
-use TenantCloud\JsonApi\Schema\User\UserSchema;
-use App\Models\User;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Arr;
+use Tests\Mocks\TestUser;
+use Tests\Mocks\TestUserSchema;
 use Tests\Mocks\TestUserTransformer;
-use Tests\TestCase;
 
 /**
- * Class JsonApiResponseTest
- *
  * @see JsonApiResponse
  */
 class JsonApiResponseTest extends TestCase
 {
-	use DatabaseTransactions;
-
 	public function testCollection(): void
 	{
-		$user = $this->seeder->generateLandlord();
-		$users = User::query()->where('id', $user->id)->get();
+		$user = new TestUser(1, 'name');
+		$users = collect([$user]);
 
 		$data = ApiRequestDTO::create()->setFields([
 			'user' => ['id', 'name'],
 		]);
-		$type = app(UserSchema::class)->getResourceType();
+		$type = app(TestUserSchema::class)->getResourceType();
 
 		$context = new RequestContext($user, $data, $type);
 		$context->fields()->addValidated($type, ['id', 'name']);
@@ -48,19 +43,19 @@ class JsonApiResponseTest extends TestCase
 
 	public function testNull(): void
 	{
-		$user = $this->seeder->generateLandlord();
+		$user = new TestUser(1, 'name');
 
 		$data = ApiRequestDTO::create()->setFields([
 			'user' => ['id', 'name'],
 		]);
-		$type = app(UserSchema::class)->getResourceType();
+		$type = app(TestUserSchema::class)->getResourceType();
 
 		$context = new RequestContext($user, $data, $type);
 		$context->fields()->addValidated($type, ['id', 'name']);
 
 		$response = (new JsonApiResponse(null, new TestUserTransformer()))
 			->setContext($context)
-			->respondWithStatusCreated();
+			->setResponseCode(Response::HTTP_CREATED);
 
 		$request = Request::createFrom(request());
 		$jsonResponse = $response->toResponse($request);
@@ -70,11 +65,11 @@ class JsonApiResponseTest extends TestCase
 
 	public function testPagination(): void
 	{
-		$user = $this->seeder->generateLandlord();
-		$users = User::query()->where('id', $user->id)->paginate();
+		$user = new TestUser(1, 'name');
+		$users = new LengthAwarePaginator([$user], 1, 15);
 
 		$data = ApiRequestDTO::create();
-		$type = app(UserSchema::class)->getResourceType();
+		$type = app(TestUserSchema::class)->getResourceType();
 
 		$context = new RequestContext($user, $data, $type);
 		$context->fields()->addValidated($type, ['id', 'name']);
@@ -91,10 +86,10 @@ class JsonApiResponseTest extends TestCase
 
 	public function testItem(): void
 	{
-		$user = $this->seeder->generateLandlord();
+		$user = new TestUser(1, 'name');
 
 		$data = ApiRequestDTO::create();
-		$type = app(UserSchema::class)->getResourceType();
+		$type = app(TestUserSchema::class)->getResourceType();
 
 		$context = new RequestContext($user, $data, $type);
 		$context->fields()->addValidated($type, ['id', 'name']);
@@ -110,11 +105,11 @@ class JsonApiResponseTest extends TestCase
 
 	public function testWithMeta(): void
 	{
-		$user = $this->seeder->generateLandlord();
-		$users = User::query()->where('id', $user->id)->paginate();
+		$user = new TestUser(1, 'name');
+		$users = new LengthAwarePaginator([$user], 1, 15);
 
 		$data = ApiRequestDTO::create();
-		$type = app(UserSchema::class)->getResourceType();
+		$type = app(TestUserSchema::class)->getResourceType();
 
 		$context = new RequestContext($user, $data, $type);
 		$context->fields()->addValidated($type, ['id', 'name']);

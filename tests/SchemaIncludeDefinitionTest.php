@@ -7,8 +7,7 @@ use TenantCloud\JsonApi\JsonApiRegistry;
 use TenantCloud\JsonApi\SchemaIncludeDefinition;
 use Tests\Mocks\DuplicateAttributesTestSchema;
 use Tests\Mocks\IncludeTestScheme;
-use Tests\Mocks\TestSchema;
-use Tests\TestCase;
+use Tests\Mocks\TestUserSchema;
 
 /**
  * @see SchemaIncludeDefinition
@@ -23,13 +22,13 @@ class SchemaIncludeDefinitionTest extends TestCase
 
 		$this->registry = app(JsonApiRegistry::class);
 		$this->registry->register(app(IncludeTestScheme::class));
-		$this->registry->register(app(TestSchema::class));
+		$this->registry->register(app(TestUserSchema::class));
 	}
 
-	public function testSetData()
+	public function testSetData(): void
 	{
 		$validation = true;
-		$validator = SchemaIncludeDefinition::create(TestSchema::class, $validation);
+		$validator = SchemaIncludeDefinition::create(TestUserSchema::class, $validation);
 		$schema = $validator->getSchemaClass();
 
 		$this->assertTrue($validator->getValidation());
@@ -40,7 +39,7 @@ class SchemaIncludeDefinitionTest extends TestCase
 		$this->assertSame($schema, $validator->getSchemaClass());
 	}
 
-	public function testDuplicateAttributesThrowException()
+	public function testDuplicateAttributesThrowException(): void
 	{
 		$this->expectException(DuplicateSchemaFieldDefinitionException::class);
 		$this->registry->register(app(DuplicateAttributesTestSchema::class));

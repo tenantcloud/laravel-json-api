@@ -6,15 +6,13 @@ use TenantCloud\JsonApi\AttributeContext\Page;
 use Tests\TestCase;
 
 /**
- * Class PageTest
- *
  * @see Page
  */
 class PageTest extends TestCase
 {
 	public const DEFAULT_PAGE = 1;
 
-	public function testSetAndGetPage()
+	public function testSetAndGetPage(): void
 	{
 		$page = 2;
 

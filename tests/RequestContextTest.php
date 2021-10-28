@@ -5,9 +5,8 @@ namespace Tests;
 use TenantCloud\JsonApi\DTO\ApiRequestDTO;
 use TenantCloud\JsonApi\Enums\SortType;
 use TenantCloud\JsonApi\RequestContext;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\AttributeContext\PageTest;
-use Tests\TestCase;
+use Tests\Mocks\TestUser;
 
 /**
  * Class RequestContextTest
@@ -16,11 +15,9 @@ use Tests\TestCase;
  */
 class RequestContextTest extends TestCase
 {
-	use DatabaseTransactions;
-
-	public function testConstructorSetDataObject()
+	public function testConstructorSetDataObject(): void
 	{
-		$user = factory(User::class)->create();
+		$user = new TestUser(1, 'name');
 		$data = ApiRequestDTO::create();
 
 		$context = new RequestContext($user, $data, $this->faker->name);
@@ -47,10 +44,10 @@ class RequestContextTest extends TestCase
 		$this->assertSame($filledData['fields'], $context->fields()->original());
 	}
 
-	public function testResourceType()
+	public function testResourceType(): void
 	{
 		$resourceType = $this->faker->name;
-		$user = factory(User::class)->create();
+		$user = new TestUser(1, 'name');
 		$data = ApiRequestDTO::create();
 
 		$context = new RequestContext($user, $data, $resourceType);

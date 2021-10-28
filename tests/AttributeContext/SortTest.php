@@ -2,18 +2,16 @@
 
 namespace Tests\AttributeContext;
 
-use App\Enum\SortType;
 use TenantCloud\JsonApi\AttributeContext\Sort;
+use TenantCloud\JsonApi\Enums\SortType;
 use Tests\TestCase;
 
 /**
- * Class SortTest
- *
  * @see Sort
  */
 class SortTest extends TestCase
 {
-	public function testSetSortInConstructor()
+	public function testSetSortInConstructor(): void
 	{
 		// Json api parse ASC\DESC by minus '-' symbol at the start of parameter.
 		$sortAttributes = ['asc', '-desc'];
@@ -29,7 +27,7 @@ class SortTest extends TestCase
 		$this->assertSame(array_keys($expectedAttributes), $sortObj->attributes());
 	}
 
-	public function testGetAttributes()
+	public function testGetAttributes(): void
 	{
 		$sortParameters = ['test'];
 		$sortObj = new Sort();
@@ -39,7 +37,7 @@ class SortTest extends TestCase
 		$this->assertSame($sortParameters, $sortObj->attributes());
 	}
 
-	public function testAddAndRemoveSortAttribute()
+	public function testAddAndRemoveSortAttribute(): void
 	{
 		$ascSortParameter = 'test_asc';
 		$descSortParameter = '-test_desc';

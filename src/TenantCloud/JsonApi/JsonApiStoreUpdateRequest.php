@@ -2,11 +2,11 @@
 
 namespace TenantCloud\JsonApi;
 
+use Illuminate\Contracts\Validation\Factory as ValidationFactory;
+use Illuminate\Foundation\Http\FormRequest;
 use TenantCloud\JsonApi\DTO\ApiRequestDTO;
 use TenantCloud\JsonApi\Interfaces\Context;
 use TenantCloud\JsonApi\Interfaces\Schema;
-use Illuminate\Contracts\Validation\Factory as ValidationFactory;
-use Illuminate\Foundation\Http\FormRequest;
 use Tests\JsonApiStoreUpdateRequestTest;
 
 /**

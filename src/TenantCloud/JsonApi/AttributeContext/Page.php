@@ -5,13 +5,10 @@ namespace TenantCloud\JsonApi\AttributeContext;
 use Tests\AttributeContext\PageTest;
 
 /**
- * Class Page
- *
  * @see PageTest
  */
 class Page
 {
-	/** @var int */
 	private int $page = 1;
 
 	/**

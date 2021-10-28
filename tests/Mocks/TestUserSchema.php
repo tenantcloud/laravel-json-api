@@ -10,7 +10,7 @@ use TenantCloud\JsonApi\SchemaIncludeDefinition;
 /**
  * Class TestSchema
  */
-class TestSchema extends BaseSchema
+class TestUserSchema extends BaseSchema
 {
 	protected string $resourceType = 'test_schema';
 

@@ -6,13 +6,11 @@ use TenantCloud\JsonApi\AttributeContext\Filter;
 use Tests\TestCase;
 
 /**
- * Class FilterTest
- *
  * @see Filter
  */
 class FilterTest extends TestCase
 {
-	public function testSetFilters()
+	public function testSetFilters(): void
 	{
 		$filters = [
 			'test' => $this->faker->name,
@@ -25,7 +23,7 @@ class FilterTest extends TestCase
 		$this->assertSame($filters, $filterObj->all());
 	}
 
-	public function testGetFilter()
+	public function testGetFilter(): void
 	{
 		$key = 'test';
 
@@ -41,7 +39,7 @@ class FilterTest extends TestCase
 		$this->assertNull($filterObj->getOne($key . '1'));
 	}
 
-	public function testOnlyFilter()
+	public function testOnlyFilter(): void
 	{
 		$onlyKeys = ['test1'];
 		$filters = [
@@ -57,7 +55,7 @@ class FilterTest extends TestCase
 		$this->assertArrayNotHasKeys(['test2'], $filterObj->only($onlyKeys));
 	}
 
-	public function testSetFilter()
+	public function testSetFilter(): void
 	{
 		$key = 'test';
 		$value = $this->faker->name;

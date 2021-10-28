@@ -22,7 +22,7 @@ class IncludeTestScheme extends BaseSchema
 
 		// Includes
 		$this->includes = [
-			'test_schema' => SchemaIncludeDefinition::create(TestSchema::class, true),
+			'test_schema' => SchemaIncludeDefinition::create(TestUserSchema::class, true),
 		];
 	}
 }

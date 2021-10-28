@@ -24,28 +24,21 @@ class RequestContext implements Context
 {
 	protected ?string $resourceType;
 
-	/**
-	 * @var TUser
-	 */
+	/** @var TUser */
 	protected $user;
 
-	/** @var Fields */
 	protected Fields $fields;
 
-	/** @var Includes */
 	protected Includes $includes;
 
-	/** @var Filter */
 	protected Filter $filters;
 
-	/** @var Page */
 	protected Page $page;
 
-	/** @var Sort */
 	protected Sort $sort;
 
 	/**
-	 * @param TUser     $user
+	 * @param TUser $user
 	 */
 	public function __construct($user, ApiRequestDTO $params, string $resourceType = null)
 	{

@@ -6,8 +6,6 @@ use TenantCloud\JsonApi\AttributeContext\Fields;
 use Tests\TestCase;
 
 /**
- * Class FieldsTest
- *
  * @see Fields
  */
 class FieldsTest extends TestCase

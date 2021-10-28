@@ -8,13 +8,10 @@ use TenantCloud\JsonApi\Enums\SortType;
 use Tests\AttributeContext\SortTest;
 
 /**
- * Class Sort
- *
  * @see SortTest
  */
 class Sort
 {
-	/** @var array */
 	private array $sort = [];
 
 	public function __construct(array $sortParams = [])

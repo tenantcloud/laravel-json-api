@@ -2,22 +2,17 @@
 
 namespace Tests;
 
-use TenantCloud\JsonApi\JsonApiStoreUpdateRequest;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Validation\ValidationException;
-use Tests\Backend\Library\Traits\TestValidationResult;
-use Tests\Mocks\TestSchema;
-use Tests\NonPublicAccessibleTrait;
-use Tests\TestCase;
+use ReflectionProperty;
+use TenantCloud\JsonApi\JsonApiStoreUpdateRequest;
+use Tests\Mocks\TestUserSchema;
+use Tests\Traits\TestValidationResult;
 
 /**
  * @see JsonApiStoreUpdateRequest
  */
 class JsonApiStoreUpdateRequestTest extends TestCase
 {
-	use DatabaseTransactions;
-	use NonPublicAccessibleTrait;
-
 	protected JsonApiStoreUpdateRequest $testRequest;
 
 	protected function setUp(): void
@@ -25,7 +20,7 @@ class JsonApiStoreUpdateRequestTest extends TestCase
 		parent::setUp();
 
 		$this->testRequest = new class() extends JsonApiStoreUpdateRequest {
-			protected $schema = TestSchema::class;
+			protected $schema = TestUserSchema::class;
 
 			public function rules(): array
 			{
@@ -96,10 +91,13 @@ class JsonApiStoreUpdateRequestTest extends TestCase
 		try {
 			$request->validateResolved();
 		} catch (ValidationException $exception) {
-			$validator = $this->getNonPublicProperty($exception, 'validator');
+			$validator = $exception->validator;
 		} finally {
 			if (!$validator) {
-				$validator = $this->getNonPublicProperty($request, 'validator');
+				$ref = new ReflectionProperty(get_class($request), 'validator');
+				$ref->setAccessible(true);
+
+				$validator = $ref->getValue($request);
 			}
 		}
 

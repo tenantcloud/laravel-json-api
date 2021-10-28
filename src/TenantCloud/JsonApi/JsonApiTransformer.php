@@ -2,10 +2,10 @@
 
 namespace TenantCloud\JsonApi;
 
-use TenantCloud\JsonApi\Exceptions\SchemaDoesNotExistException;
 use Closure;
 use Illuminate\Support\Arr;
 use League\Fractal\TransformerAbstract;
+use TenantCloud\JsonApi\Exceptions\SchemaDoesNotExistException;
 
 class JsonApiTransformer extends TransformerAbstract
 {

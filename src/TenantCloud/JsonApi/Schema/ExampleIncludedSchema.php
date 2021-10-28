@@ -15,6 +15,7 @@ class ExampleIncludedSchema extends BaseSchema
 	{
 		$attributes = [
 			'id',
+			'name',
 			SchemaFieldDefinition::create('field_with_validation', static function (RequestContext $context) {
 				/** @var TestUser $user */
 				$user = $context->user();

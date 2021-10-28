@@ -6,8 +6,6 @@ use Illuminate\Support\Arr;
 use Tests\AttributeContext\FilterTest;
 
 /**
- * Class Filter
- *
  * @see FilterTest
  */
 class Filter

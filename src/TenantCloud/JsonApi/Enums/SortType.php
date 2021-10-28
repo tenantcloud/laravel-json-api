@@ -1,8 +1,6 @@
 <?php
 
-
 namespace TenantCloud\JsonApi\Enums;
-
 
 class SortType
 {

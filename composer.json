@@ -4,9 +4,9 @@
 	"minimum-stability": "stable",
 	"license": "MIT",
 	"require": {
-		"php": ">=7.4 || ^8.0",
+		"php": ">=7.4",
 		"tenantcloud/php-standard": "^1.2",
-		"illuminate/support": "^8.68",
+		"illuminate/support": "^8.0",
 		"spatie/laravel-fractal": "^5.4",
 		"tenantcloud/data-transfer-objects": "^1.0"
 	},
@@ -20,7 +20,10 @@
 	"autoload": {
 		"psr-0": {
 			"": "src/"
-		}
+		},
+		"files": [
+			"src/TenantCloud/JsonApi/functions.php"
+		]
 	},
 	"autoload-dev": {
 		"psr-4": {
