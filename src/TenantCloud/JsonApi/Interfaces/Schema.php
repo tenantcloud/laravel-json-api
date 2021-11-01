@@ -21,7 +21,7 @@ interface Schema
 
 	public function getPrimaryMeta(): array;
 
-	public function validateAttributes();
+	public function validateAttributes(?Context $context);
 
 	public function validate(Context $context): self;
 }

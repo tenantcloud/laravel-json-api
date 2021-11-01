@@ -2,8 +2,8 @@
 
 namespace Tests;
 
-use Illuminate\Log\LogManager;
 use Illuminate\Support\Str;
+use Psr\Log\LoggerInterface;
 use TenantCloud\JsonApi\Validation\Rules\JsonApiIncludesRule;
 
 /**
@@ -23,8 +23,8 @@ class JsonApiIncludesRuleTest extends TestCase
 		$apiUrl = $this->faker->word;
 		$wrongInclude = Str::random(9);
 
-		$this->partialMock(LogManager::class)
-			->expects('debug')
+		$this->partialMock(LoggerInterface::class)
+			->shouldReceive('debug')
 			->withArgs(function (string $message, array $context) use ($wrongInclude, $apiUrl) {
 				$this->assertSame('Wrong includes are requested', $message);
 				$this->assertSame([
@@ -33,10 +33,12 @@ class JsonApiIncludesRuleTest extends TestCase
 				], $context);
 
 				return true;
-			});
+			})
+			->once();
 
 		$errors = $this->validate(new JsonApiIncludesRule([Str::random(10), Str::random(8)], $apiUrl), $wrongInclude);
-		$this->assertEmpty($errors);
+
+		$this->assertSame(trans('exceptions.not_valid_includes'), head($errors));
 	}
 
 	private function validate(JsonApiIncludesRule $rule, string $value): array

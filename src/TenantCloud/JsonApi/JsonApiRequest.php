@@ -21,7 +21,8 @@ abstract class JsonApiRequest extends FormRequest
 
 	protected array $availableSorts = [];
 
-	protected ?Schema $schema;
+	/** @var Schema|string|null */
+	protected $schema;
 
 	private ?RequestContext $context;
 

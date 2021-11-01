@@ -28,8 +28,6 @@ abstract class BaseSchema implements Schema
 
 	protected string $resourceType = '';
 
-	protected Context $context;
-
 	protected bool $isShowAttributesInIncluded = true;
 
 	public function __construct(array $attributes)
@@ -73,37 +71,25 @@ abstract class BaseSchema implements Schema
 		return $this->meta;
 	}
 
-	public function getContext(): ?Context
-	{
-		return $this->context;
-	}
-
 	public function isShowAttributesInIncluded(): bool
 	{
 		return $this->isShowAttributesInIncluded;
 	}
 
-	public function setContext(Context $context)
-	{
-		$this->context = $context;
-	}
-
 	public function validate(Context $context): Schema
 	{
-		$this->setContext($context);
-
 		// We need validate includes before fields to prevent load all nested includes for fields authorize.
-		$this->validateInclude();
+		$this->validateInclude($context);
 
 		// Validate schema and includes attributes. Only validate authorized includes fields.
-		$this->validateAttributes();
+		$this->validateAttributes($context);
 
 		return $this;
 	}
 
-	public function validateAttributes(): self
+	public function validateAttributes(?Context $context): self
 	{
-		if (!$this->context) {
+		if (!$context) {
 			throw new InvalidArgumentException('No context');
 		}
 
@@ -111,7 +97,7 @@ abstract class BaseSchema implements Schema
 
 		// We use only validates includes to prevent load all nested includes.
 		/* @var SchemaIncludeDefinition $include */
-		foreach ($this->context->includes()->getValidatedIncludes() as $includeKey) {
+		foreach ($context->includes()->getValidatedIncludes() as $includeKey) {
 			$include = $this->getNestedIncludeByKey($includeKey);
 
 			if (!$include) {
@@ -128,37 +114,37 @@ abstract class BaseSchema implements Schema
 			// $attributes - ['key' => callback|bool|null]]
 			$validatedAttributes = [];
 
-			$fields = $this->context->fields()->getOriginalByKey($resourceKey);
+			$fields = $context->fields()->getOriginalByKey($resourceKey);
 
 			$allowedAttributes = count($fields) ? Arr::only($attributes, $fields) : $attributes;
 
 			foreach ($allowedAttributes as $attributeKey => $definition) {
 				/** @var SchemaFieldDefinition $definition */
-				if ($definition->authorize($this->context)) {
+				if ($definition->authorize($context)) {
 					$validatedAttributes[] = $attributeKey;
 				}
 			}
 
 			$validatedAttributes[] = $this->primaryAttribute;
 
-			$this->context->fields()->addValidated($resourceKey, $validatedAttributes);
+			$context->fields()->addValidated($resourceKey, $validatedAttributes);
 		}
 
 		return $this;
 	}
 
-	public function validateInclude(): self
+	public function validateInclude(?Context $context): self
 	{
-		if (!$this->context) {
+		if (!$context) {
 			throw new InvalidArgumentException('No context');
 		}
 
-		$includes = $this->context->includes()->all();
+		$includes = $context->includes()->all();
 
 		foreach ($includes as $include) {
 			try {
-				$this->authorizeNestedInclude($this, explode('.', $include));
-				$this->context->includes()->addValidated($include);
+				$this->authorizeNestedInclude($this, $context, explode('.', $include));
+				$context->includes()->addValidated($include);
 			} catch (IncludeDoesNotAuthorized $e) {
 				// We do not throw exception for not authorized includes.
 			}
@@ -189,7 +175,7 @@ abstract class BaseSchema implements Schema
 		return $include;
 	}
 
-	private function authorizeNestedInclude(Schema $schema, array $nestedKeys): void
+	private function authorizeNestedInclude(Schema $schema, Context $context, array $nestedKeys): void
 	{
 		$baseInclude = array_shift($nestedKeys);
 
@@ -200,14 +186,14 @@ abstract class BaseSchema implements Schema
 		}
 
 		$validation = $include->getValidation();
-		$expectation = is_callable($validation) ? $validation($this->context) : $validation;
+		$expectation = is_callable($validation) ? $validation($context) : $validation;
 
 		if (!$expectation) {
 			throw new IncludeDoesNotAuthorized();
 		}
 
 		if ($nestedKeys) {
-			$this->authorizeNestedInclude($include->getSchemaClass(), $nestedKeys);
+			$this->authorizeNestedInclude($include->getSchemaClass(), $context, $nestedKeys);
 		}
 	}
 
