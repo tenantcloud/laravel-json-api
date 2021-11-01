@@ -4,6 +4,7 @@ namespace Tests;
 
 use Illuminate\Foundation\Testing\WithFaker;
 use Orchestra\Testbench\TestCase as BaseTestCase;
+use TenantCloud\JsonApi\JsonApiServiceProvider;
 
 class TestCase extends BaseTestCase
 {
@@ -21,5 +22,12 @@ class TestCase extends BaseTestCase
 		foreach ($keys as $key) {
 			$this->assertArrayNotHasKey($key, $item);
 		}
+	}
+
+	protected function getPackageProviders($app)
+	{
+		return [
+			JsonApiServiceProvider::class,
+		];
 	}
 }

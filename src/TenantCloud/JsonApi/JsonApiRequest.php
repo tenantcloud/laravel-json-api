@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use TenantCloud\JsonApi\DTO\ApiRequestDTO;
 use TenantCloud\JsonApi\Interfaces\Context;
 use TenantCloud\JsonApi\Interfaces\Schema;
+use TenantCloud\JsonApi\Validation\Rules\JsonApiFieldsRule;
 use TenantCloud\JsonApi\Validation\Rules\JsonApiIncludesRule;
 
 /**
@@ -30,7 +31,7 @@ abstract class JsonApiRequest extends FormRequest
 	{
 		return [
 			'fields'   => ['array', 'max:30'],
-			'fields.*' => ['string', 'max:1000'],
+			'fields.*' => ['string', 'max:1000', new JsonApiFieldsRule($this->route()->uri)],
 			'sort'     => ['string', 'max:500'],
 			'filter'   => ['array', 'max:30'],
 			'include'  => ['string', 'max:500', new JsonApiIncludesRule($this->availableIncludes, $this->route()->uri)],
