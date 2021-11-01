@@ -1,5 +1,5 @@
 {
-	"name": "tenantcloud/composer-package",
+	"name": "tenantcloud/php-json-api",
 	"description": "A template for composer packages",
 	"minimum-stability": "dev",
 	"license": "MIT",
