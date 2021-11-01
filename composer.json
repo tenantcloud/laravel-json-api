@@ -34,5 +34,12 @@
 		"test": "./vendor/bin/pest",
 		"cs-fix": "./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix -v --show-progress=dots",
 		"phpstan":  "./tools/phpstan/vendor/bin/phpstan analyse"
+	},
+	"extra": {
+		"laravel": {
+			"providers": [
+				"TenantCloud\\JsonApi\\JsonApiServiceProvider"
+			]
+		}
 	}
 }

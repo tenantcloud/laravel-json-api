@@ -22,7 +22,11 @@ class JsonApiIncludesRule implements Rule
 		$this->apiUrl = $apiUrl;
 	}
 
-	public function passes($attribute, $include)
+	/**
+	 * @param string $attribute
+	 * @param mixed  $include
+	 */
+	public function passes($attribute, $include): bool
 	{
 		$include = array_filter_empty(explode(',', $include));
 
@@ -43,8 +47,8 @@ class JsonApiIncludesRule implements Rule
 		return true;
 	}
 
-	public function message()
+	public function message(): string
 	{
-		return trans('exceptions.not_valid_includes');
+		return trans('exceptions.not_valid_json_api_request');
 	}
 }
