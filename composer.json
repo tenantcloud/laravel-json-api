@@ -1,7 +1,7 @@
 {
 	"name": "tenantcloud/composer-package",
 	"description": "A template for composer packages",
-	"minimum-stability": "stable",
+	"minimum-stability": "dev",
 	"license": "MIT",
 	"require": {
 		"php": ">=7.4 || ^8.0",

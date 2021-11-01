@@ -95,11 +95,6 @@ class JsonApiResponse implements Responsable
 		return $this;
 	}
 
-	protected function getResponseMethod(): string
-	{
-		return 'respond' . ($this->responseMethod ?: 'Ok');
-	}
-
 	protected function makeResource()
 	{
 		switch (true) {
