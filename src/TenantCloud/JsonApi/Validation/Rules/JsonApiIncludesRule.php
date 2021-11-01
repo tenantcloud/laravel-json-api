@@ -3,7 +3,7 @@
 namespace TenantCloud\JsonApi\Validation\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Log\LogManager;
+use Psr\Log\LoggerInterface;
 use function TenantCloud\JsonApi\array_filter_empty;
 use Tests\Backend\Unit\Validation\Rules\JsonApiIncludesRuleTest;
 
@@ -31,11 +31,13 @@ class JsonApiIncludesRule implements Rule
 		$wrongIncludes = array_diff($include, $validatedIncludes);
 
 		if ($wrongIncludes) {
-			resolve(LogManager::class)
+			resolve(LoggerInterface::class)
 				->debug('Wrong includes are requested', [
 					'wrong_includes' => $wrongIncludes,
 					'route'          => $this->apiUrl,
 				]);
+
+			return false;
 		}
 
 		return true;
