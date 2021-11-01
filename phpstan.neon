@@ -2,15 +2,11 @@ includes:
 	- tools/phpstan/vendor/phpstan/phpstan/conf/bleedingEdge.neon
 
 parameters:
-	level: 8
+	level: 1
 	tmpDir: ./tmp/phpstan
 
 	paths:
 		- src
-		- tests
 
 	ignoreErrors:
-		# There's no extension for that :(
-		-
-			message: '#Call to an undefined method Pest\\Expectation|Pest\\Support\\Extendable::#i'
-			path: 'tests/*Test.php'
+		-'#Unsafe usage of new static\(\)\.#i'
