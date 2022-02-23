@@ -6,14 +6,14 @@
 	"require": {
 		"php": ">=7.4 || ^8.0",
 		"tenantcloud/php-standard": "^1.2",
-		"illuminate/support": "^8.0",
+		"illuminate/support": "^8.0 || ^9.0",
 		"spatie/laravel-fractal": "^5.4",
 		"tenantcloud/data-transfer-objects": "^1.0"
 	},
 	"require-dev": {
 		"pestphp/pest": "^1.0",
 		"phpunit/phpunit": "^9.5",
-		"orchestra/testbench": "^6.22",
+		"orchestra/testbench": "^6.22 || ^7.0",
 		"friendsofphp/php-cs-fixer": "^2.19.0",
 		"tenantcloud/php-cs-fixer-rule-sets": "^1.2"
 	},
