@@ -30,11 +30,11 @@ abstract class JsonApiRequest extends FormRequest
 	public function rules(): array
 	{
 		return [
-			'fields'   => ['array', 'max:30'],
+			'fields'   => ['array', 'max:50'],
 			'fields.*' => ['string', 'max:1000', new JsonApiFieldsRule($this->route()->uri)],
 			'sort'     => ['string', 'max:500'],
-			'filter'   => ['array', 'max:30'],
-			'include'  => ['string', 'max:500', new JsonApiIncludesRule($this->availableIncludes, $this->route()->uri)],
+			'filter'   => ['array', 'max:50'],
+			'include'  => ['string', 'max:2000', new JsonApiIncludesRule($this->availableIncludes, $this->route()->uri)],
 			'page'     => ['integer', 'min:1'],
 		];
 	}
