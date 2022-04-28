@@ -144,7 +144,7 @@ abstract class JsonApiRequest extends FormRequest
 
 	private function transformInclude(): void
 	{
-		$include = explode(',', $this->get('include', ''));
+		$include = explode(',', $this->get('include', '') ?? '');
 
 		$this->merge(['include' => array_filter_empty(array_intersect($this->availableIncludes, $include))]);
 	}
