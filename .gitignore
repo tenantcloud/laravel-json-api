@@ -10,7 +10,7 @@
 /build
 
 # Cache
-.php_cs.cache
+.php-cs-fixer.cache
 **/.phpunit.result.cache
 
 # Temporary

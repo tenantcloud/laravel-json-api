@@ -41,5 +41,10 @@
 				"TenantCloud\\JsonApi\\JsonApiServiceProvider"
 			]
 		}
+	},
+	"config": {
+		"allow-plugins": {
+			"pestphp/pest-plugin": true
+		}
 	}
 }

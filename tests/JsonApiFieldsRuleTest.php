@@ -29,8 +29,10 @@ class JsonApiFieldsRuleTest extends TestCase
 		$this->assertEmpty($this->validate(new JsonApiFieldsRule($this->faker->word), $fields));
 	}
 
-	public function testWithWrongField(): void
+	public function testWrongFieldWithoutStrictValidation(): void
 	{
+		config()->set('json-api.strict_validation', false);
+
 		$fields = implode(',', array_keys(resolve(TestUserSchema::class)->getAttributes()));
 		$wrongField = Str::random(10);
 		$apiUrl = $this->faker->word;
@@ -54,8 +56,37 @@ class JsonApiFieldsRuleTest extends TestCase
 		$this->assertEmpty($errors);
 	}
 
-	public function testWithWrongSchema(): void
+	public function testWrongFieldWithStrictValidation(): void
 	{
+		config()->set('json-api.strict_validation', true);
+
+		$fields = implode(',', array_keys(resolve(TestUserSchema::class)->getAttributes()));
+		$wrongField = Str::random(10);
+		$apiUrl = $this->faker->word;
+
+		$this->partialMock(LoggerInterface::class)
+			->shouldReceive('debug')
+			->withArgs(function (string $message, array $context) use ($wrongField, $apiUrl) {
+				$this->assertSame('Wrong json api fields are requested', $message);
+				$this->assertSame([
+					'schema'       => $this->getNonPublicProperty(resolve(TestUserSchema::class), 'resourceType'),
+					'wrong_fields' => [$wrongField],
+					'route'        => $apiUrl,
+				], $context);
+
+				return true;
+			})
+			->once();
+
+		$errors = $this->validate(new JsonApiFieldsRule($apiUrl), $fields . ',' . $wrongField);
+
+		$this->assertSame(["The requested fields not valid: {$wrongField}"], $errors);
+	}
+
+	public function testWrongSchemaWithoutStrictValidation(): void
+	{
+		config()->set('json-api.strict_validation', false);
+
 		$fields = implode(',', array_keys(resolve(TestUserSchema::class)->getAttributes()));
 		$apiUrl = $this->faker->word;
 		$wrongSchema = Str::random(10);
@@ -77,6 +108,33 @@ class JsonApiFieldsRuleTest extends TestCase
 		$errors = $this->validate(new JsonApiFieldsRule($apiUrl), $fields, $wrongSchema);
 
 		$this->assertEmpty($errors);
+	}
+
+	public function testWrongSchemaWithStrictValidation(): void
+	{
+		config()->set('json-api.strict_validation', true);
+
+		$fields = implode(',', array_keys(resolve(TestUserSchema::class)->getAttributes()));
+		$apiUrl = $this->faker->word;
+		$wrongSchema = Str::random(10);
+
+		$this->partialMock(LoggerInterface::class)
+			->shouldReceive('debug')
+			->withArgs(function (string $message, array $context) use ($wrongSchema, $apiUrl) {
+				$this->assertSame('Wrong schema when retrieving json api fields', $message);
+				$this->assertSame([
+					'schema'            => $wrongSchema,
+					'request_field_key' => 'field.' . $wrongSchema,
+					'route'             => $apiUrl,
+				], $context);
+
+				return true;
+			})
+			->once();
+
+		$errors = $this->validate(new JsonApiFieldsRule($apiUrl), $fields, $wrongSchema);
+
+		$this->assertSame(["The requested schema not valid: {$wrongSchema}"], $errors);
 	}
 
 	private function validate(JsonApiFieldsRule $rule, string $value, string $schema = null): array
