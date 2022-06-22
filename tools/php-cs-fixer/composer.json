@@ -1,6 +1,6 @@
 {
 	"require": {
-		"friendsofphp/php-cs-fixer": "~3.8.0",
-		"tenantcloud/php-cs-fixer-rule-sets": "~1.4.0"
+		"friendsofphp/php-cs-fixer": "^2.19",
+		"tenantcloud/php-cs-fixer-rule-sets": "~1.2.0"
 	}
 }
