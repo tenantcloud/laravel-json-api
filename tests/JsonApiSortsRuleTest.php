@@ -16,6 +16,7 @@ class JsonApiSortsRuleTest extends TestCase
 		$sort = Str::random(10);
 
 		$this->assertEmpty($this->validate(new JsonApiSortRule([$sort, Str::random(8)], $this->faker->word), $sort));
+		$this->assertEmpty($this->validate(new JsonApiSortRule([$sort, Str::random(8)], $this->faker->word), "-{$sort}"));
 	}
 
 	public function testError(): void

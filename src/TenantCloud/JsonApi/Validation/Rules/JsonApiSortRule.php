@@ -4,6 +4,7 @@ namespace TenantCloud\JsonApi\Validation\Rules;
 
 use Illuminate\Config\Repository;
 use Illuminate\Contracts\Validation\Rule;
+use Illuminate\Support\Str;
 use Psr\Log\LoggerInterface;
 use function TenantCloud\JsonApi\array_filter_empty;
 use Tests\JsonApiSortsRuleTest;
@@ -27,15 +28,15 @@ class JsonApiSortRule implements Rule
 
 	/**
 	 * @param string $attribute
-	 * @param mixed  $sort
+	 * @param string $sort
 	 */
 	public function passes($attribute, $sort): bool
 	{
-		$sort = array_filter_empty(explode(',', $sort));
+		$sorts = $this->prepareSorts($sort);
 
-		$validatedSorts = array_intersect($this->availableSorts, $sort);
+		$validatedSorts = array_intersect($this->availableSorts, $sorts);
 
-		$this->wrongSorts = array_diff($sort, $validatedSorts);
+		$this->wrongSorts = array_diff($sorts, $validatedSorts);
 
 		if ($this->wrongSorts) {
 			resolve(LoggerInterface::class)
@@ -55,5 +56,18 @@ class JsonApiSortRule implements Rule
 	public function message(): string
 	{
 		return 'The requested sorts are not valid: ' . implode(', ', $this->wrongSorts);
+	}
+
+	private function prepareSorts(string $sort): array
+	{
+		$sorts = array_filter_empty(explode(',', $sort));
+
+		return array_map(function (string $sortField) {
+			if (Str::startsWith($sortField, '-')) {
+				return mb_substr($sortField, 1);
+			}
+
+			return $sortField;
+		}, $sorts);
 	}
 }
