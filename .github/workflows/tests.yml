@@ -44,7 +44,7 @@ jobs:
             -   name: Install dependencies
                 run: |
                     composer require "illuminate/support=${{ matrix.laravel }}" --prefer-dist --no-interaction --no-update
-                    composer install --prefer-dist --no-progress
+                    composer update --prefer-dist --no-progress
 
             -   name: Execute tests
                 run: composer test -- --colors=always
@@ -86,7 +86,7 @@ jobs:
             -   name: Install dependencies
                 run: |
                     composer require "illuminate/support=${{ matrix.laravel }}" --prefer-dist --no-interaction --no-update
-                    composer install --prefer-dist --no-progress --working-dir=tools/php-cs-fixer
+                    composer update --prefer-dist --no-progress --working-dir=tools/php-cs-fixer
 
             -   name: Run php-cs-fixer
                 run: composer cs-fix -- --dry-run --diff --using-cache=no --diff-format udiff
