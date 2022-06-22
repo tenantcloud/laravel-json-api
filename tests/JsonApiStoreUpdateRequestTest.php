@@ -19,7 +19,7 @@ class JsonApiStoreUpdateRequestTest extends TestCase
 	{
 		parent::setUp();
 
-		$this->testRequest = new class() extends JsonApiStoreUpdateRequest {
+		$this->testRequest = new class () extends JsonApiStoreUpdateRequest {
 			protected $schema = TestUserSchema::class;
 
 			public function rules(): array
