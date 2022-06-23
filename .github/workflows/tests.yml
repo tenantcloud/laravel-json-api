@@ -39,7 +39,7 @@ jobs:
                         ${{ runner.os }}-php-${{ matrix.prefer }}-
 
             -   name: Install dependencies
-                run: composer install --prefer-dist ${{ matrix.prefer }} --no-progress
+                run: composer install --prefer-dist --${{ matrix.prefer }} --no-progress
 
             -   name: Execute tests
                 run: composer test -- --colors=always
