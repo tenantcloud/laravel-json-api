@@ -6,7 +6,7 @@ on:
 
 jobs:
     test:
-        name: Tests & PHPStan on PHP ${{ matrix.php }}
+        name: Tests & PHPStan on PHP ${{ matrix.php }} ${{ matrix.prefer }}
 
         runs-on: ubuntu-latest
 
