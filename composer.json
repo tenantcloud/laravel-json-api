@@ -17,6 +17,9 @@
 		"friendsofphp/php-cs-fixer": "^2.19.0",
 		"tenantcloud/php-cs-fixer-rule-sets": "^1.2"
 	},
+	"conflict": {
+		"league/fractal": "<0.20"
+	},
 	"autoload": {
 		"psr-0": {
 			"": "src/"
@@ -40,6 +43,11 @@
 			"providers": [
 				"TenantCloud\\JsonApi\\JsonApiServiceProvider"
 			]
+		}
+	},
+	"config": {
+		"allow-plugins": {
+			"pestphp/pest-plugin": true
 		}
 	}
 }

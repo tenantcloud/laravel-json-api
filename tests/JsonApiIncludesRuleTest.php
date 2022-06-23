@@ -38,7 +38,7 @@ class JsonApiIncludesRuleTest extends TestCase
 
 		$errors = $this->validate(new JsonApiIncludesRule([Str::random(10), Str::random(8)], $apiUrl), $wrongInclude);
 
-		$this->assertSame(trans('exceptions.not_valid_json_api_request'), head($errors));
+		$this->assertSame("The requested includes are not valid: {$wrongInclude}", head($errors));
 	}
 
 	private function validate(JsonApiIncludesRule $rule, string $value): array

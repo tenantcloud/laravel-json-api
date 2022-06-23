@@ -2,10 +2,12 @@
 
 namespace TenantCloud\JsonApi\Validation\Rules;
 
+use Illuminate\Config\Repository;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Str;
 use Psr\Log\LoggerInterface;
 use TenantCloud\JsonApi\JsonApiRegistry;
+use Tests\JsonApiFieldsRuleTest;
 
 /**
  * @see JsonApiFieldsRuleTest
@@ -13,6 +15,10 @@ use TenantCloud\JsonApi\JsonApiRegistry;
 class JsonApiFieldsRule implements Rule
 {
 	private string $apiUrl;
+
+	private array $wrongFields = [];
+
+	private string $errorType = '';
 
 	public function __construct(string $apiUrl)
 	{
@@ -37,20 +43,29 @@ class JsonApiFieldsRule implements Rule
 					'route'             => $this->apiUrl,
 				]);
 
-			return true;
+			$this->wrongFields = [$schemaName];
+			$this->errorType = 'schema';
+
+			return !resolve(Repository::class)->get('json-api.strict_validation');
 		}
 
 		$availableFields = array_keys($schema->getAttributes());
 		$requestedFields = explode(',', $fields);
-		$wrongFields = array_diff($requestedFields, $availableFields);
+		$this->wrongFields = array_diff($requestedFields, $availableFields);
 
-		if ($wrongFields) {
+		if ($this->wrongFields) {
 			resolve(LoggerInterface::class)
 				->debug('Wrong json api fields are requested', [
 					'schema'       => $schemaName,
-					'wrong_fields' => array_values($wrongFields),
+					'wrong_fields' => array_values($this->wrongFields),
 					'route'        => $this->apiUrl,
 				]);
+
+			$this->errorType = 'fields';
+
+			if (resolve(Repository::class)->get('json-api.strict_validation')) {
+				return false;
+			}
 		}
 
 		return true;
@@ -58,6 +73,6 @@ class JsonApiFieldsRule implements Rule
 
 	public function message(): string
 	{
-		return trans('exceptions.not_valid_json_api_request');
+		return "The requested {$this->errorType} not valid: " . implode(', ', $this->wrongFields);
 	}
 }

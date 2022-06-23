@@ -10,6 +10,7 @@ use TenantCloud\JsonApi\Interfaces\Context;
 use TenantCloud\JsonApi\Interfaces\Schema;
 use TenantCloud\JsonApi\Validation\Rules\JsonApiFieldsRule;
 use TenantCloud\JsonApi\Validation\Rules\JsonApiIncludesRule;
+use TenantCloud\JsonApi\Validation\Rules\JsonApiSortRule;
 
 /**
  * Class JsonApiRequest
@@ -32,7 +33,7 @@ abstract class JsonApiRequest extends FormRequest
 		return [
 			'fields'   => ['array', 'max:50'],
 			'fields.*' => ['string', 'max:1000', new JsonApiFieldsRule($this->route()->uri)],
-			'sort'     => ['string', 'max:500'],
+			'sort'     => ['string', 'max:500', new JsonApiSortRule($this->availableSorts, $this->route()->uri)],
 			'filter'   => ['array', 'max:50'],
 			'include'  => ['string', 'max:2000', new JsonApiIncludesRule($this->availableIncludes, $this->route()->uri)],
 			'page'     => ['integer', 'min:1'],

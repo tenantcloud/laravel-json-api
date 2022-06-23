@@ -6,7 +6,7 @@ use TenantCloud\JsonApi\JsonApiTransformer;
 
 class ExampleTransformer extends JsonApiTransformer
 {
-	public $availableIncludes = [
+	public array $availableIncludes = [
 		'example_include',
 	];
 }

@@ -5,7 +5,7 @@ namespace TenantCloud\JsonApi\Validation\Rules;
 use Illuminate\Contracts\Validation\Rule;
 use Psr\Log\LoggerInterface;
 use function TenantCloud\JsonApi\array_filter_empty;
-use Tests\Backend\Unit\Validation\Rules\JsonApiIncludesRuleTest;
+use Tests\JsonApiIncludesRuleTest;
 
 /**
  * @see JsonApiIncludesRuleTest
@@ -15,6 +15,8 @@ class JsonApiIncludesRule implements Rule
 	private array $availableIncludes;
 
 	private string $apiUrl;
+
+	private array $wrongIncludes = [];
 
 	public function __construct(array $availableIncludes, string $apiUrl)
 	{
@@ -32,12 +34,12 @@ class JsonApiIncludesRule implements Rule
 
 		$validatedIncludes = array_intersect($this->availableIncludes, $include);
 
-		$wrongIncludes = array_diff($include, $validatedIncludes);
+		$this->wrongIncludes = array_diff($include, $validatedIncludes);
 
-		if ($wrongIncludes) {
+		if ($this->wrongIncludes) {
 			resolve(LoggerInterface::class)
 				->debug('Wrong includes are requested', [
-					'wrong_includes' => $wrongIncludes,
+					'wrong_includes' => $this->wrongIncludes,
 					'route'          => $this->apiUrl,
 				]);
 
@@ -49,6 +51,6 @@ class JsonApiIncludesRule implements Rule
 
 	public function message(): string
 	{
-		return trans('exceptions.not_valid_json_api_request');
+		return 'The requested includes are not valid: ' . implode(', ', $this->wrongIncludes);
 	}
 }
