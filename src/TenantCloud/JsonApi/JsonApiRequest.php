@@ -121,11 +121,7 @@ abstract class JsonApiRequest extends FormRequest
 		$newFields = [];
 
 		foreach ($fields as $field => $values) {
-			if (!$values) {
-				continue;
-			}
-
-			$newFields[$field] = explode(',', $values);
+			$newFields[$field] = explode(',', $values ?? '');
 		}
 
 		$this->merge(['fields' => $newFields]);
