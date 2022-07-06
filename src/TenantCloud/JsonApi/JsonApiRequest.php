@@ -121,6 +121,10 @@ abstract class JsonApiRequest extends FormRequest
 		$newFields = [];
 
 		foreach ($fields as $field => $values) {
+			if (!$values) {
+				continue;
+			}
+
 			$newFields[$field] = explode(',', $values);
 		}
 
