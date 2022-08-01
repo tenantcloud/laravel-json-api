@@ -7,6 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use TenantCloud\JsonApi\DTO\ApiRequestDTO;
 use TenantCloud\JsonApi\Interfaces\Context;
 use TenantCloud\JsonApi\Interfaces\Schema;
+use TenantCloud\JsonApi\Validation\Rules\JsonApiRelationshipsRule;
 use Tests\JsonApiStoreUpdateRequestTest;
 
 /**
@@ -17,13 +18,9 @@ abstract class JsonApiStoreUpdateRequest extends FormRequest
 	/** @var Schema|string */
 	protected $schema;
 
-	private ?RequestContext $context;
+	protected array $availableRelationships = [];
 
-	private array $basicRules = [
-		'data'            => ['required', 'array'],
-		'data.type'       => ['required', 'string'],
-		'data.attributes' => ['required', 'array'],
-	];
+	private ?RequestContext $context;
 
 	public function authorizeSchema(): self
 	{
@@ -66,8 +63,15 @@ abstract class JsonApiStoreUpdateRequest extends FormRequest
 	 */
 	protected function preValidateBasic(): void
 	{
+		$rules = [
+			'data'            => ['required', 'array'],
+			'data.type'       => ['required', 'string'],
+			'data.attributes' => ['required', 'array'],
+			'data.relationships'   => ['sometimes', 'array', new JsonApiRelationshipsRule($this->schema, $this->route()->uri)],
+			'data.relationships.*' => ['array:data'],
+		];
 		$factory = $this->container->make(ValidationFactory::class);
-		$validator = $factory->make($this->validationData(), $this->basicRules);
+		$validator = $factory->make($this->validationData(), $rules);
 
 		if ($validator->fails()) {
 			$this->failedValidation($validator);
@@ -81,7 +85,11 @@ abstract class JsonApiStoreUpdateRequest extends FormRequest
 		/** @var Schema $schema */
 		$schema = app($this->schema);
 
-		$this->context = new RequestContext($this->user(), ApiRequestDTO::create(), $schema->getResourceType());
+		$this->context = new RequestContext(
+			$this->user(),
+			ApiRequestDTO::create()->setRelationShips($this->get('relationships')),
+			$schema->getResourceType()
+		);
 
 		return $this;
 	}
