@@ -64,10 +64,10 @@ abstract class JsonApiStoreUpdateRequest extends FormRequest
 	protected function preValidateBasic(): void
 	{
 		$rules = [
-			'data'            => ['required', 'array'],
-			'data.type'       => ['required', 'string'],
-			'data.attributes' => ['required', 'array'],
-			'data.relationships'   => ['sometimes', 'array', new JsonApiRelationshipsRule($this->schema, $this->route()->uri)],
+			'data'                 => ['required', 'array'],
+			'data.type'            => ['required', 'string'],
+			'data.attributes'      => ['required', 'array'],
+			'data.relationships'   => ['sometimes', 'array', new JsonApiRelationshipsRule($this->availableRelationships, $this->route()->uri)],
 			'data.relationships.*' => ['array:data'],
 		];
 		$factory = $this->container->make(ValidationFactory::class);
@@ -87,7 +87,7 @@ abstract class JsonApiStoreUpdateRequest extends FormRequest
 
 		$this->context = new RequestContext(
 			$this->user(),
-			ApiRequestDTO::create()->setRelationShips($this->get('relationships')),
+			ApiRequestDTO::create()->setRelationships($this->get('relationships')),
 			$schema->getResourceType()
 		);
 

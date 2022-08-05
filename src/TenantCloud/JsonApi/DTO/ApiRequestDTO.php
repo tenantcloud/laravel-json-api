@@ -19,7 +19,7 @@ use TenantCloud\JsonApi\RequestContext;
  * @method self  setPage(int $page)
  * @method self  setInclude(array $includes)
  * @method self  setFields(array $fields)
- * @method self  setRelationShips(array $relationships)
+ * @method self  setRelationships(array $relationships)
  */
 class ApiRequestDTO extends DataTransferObject
 {
@@ -29,6 +29,6 @@ class ApiRequestDTO extends DataTransferObject
 		'page',
 		'include',
 		'fields',
-		'relationships'
+		'relationships',
 	];
 }

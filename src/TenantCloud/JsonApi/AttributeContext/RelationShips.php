@@ -43,11 +43,11 @@ class RelationShips
 
 	public function getOriginalByKey(string $key): ?array
 	{
-		return Arr::get($this->originalRelationships, "$key.data");
+		return Arr::get($this->originalRelationships, "{$key}.data");
 	}
 
 	public function getValidatedByKey(string $key): ?array
 	{
-		return Arr::get($this->validatedRelationships, "$key.data");
+		return Arr::get($this->validatedRelationships, "{$key}.data");
 	}
 }

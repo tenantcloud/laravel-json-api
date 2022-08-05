@@ -29,6 +29,15 @@ class JsonApiStoreUpdateRequestTest extends TestCase
 					'array1.*.id' => ['nullable', 'string'],
 				];
 			}
+
+			public function getRouteResolver()
+			{
+				return function () {
+					return new class () {
+						public $uri = '';
+					};
+				};
+			}
 		};
 	}
 
