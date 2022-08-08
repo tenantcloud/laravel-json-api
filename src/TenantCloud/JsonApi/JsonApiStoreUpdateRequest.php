@@ -8,6 +8,7 @@ use TenantCloud\JsonApi\DTO\ApiRequestDTO;
 use TenantCloud\JsonApi\Interfaces\Context;
 use TenantCloud\JsonApi\Interfaces\Schema;
 use TenantCloud\JsonApi\Validation\Rules\JsonApiRelationshipsRule;
+use TenantCloud\JsonApi\Validation\Rules\JsonApiSingleRelationRule;
 use Tests\JsonApiStoreUpdateRequestTest;
 
 /**
@@ -68,7 +69,7 @@ abstract class JsonApiStoreUpdateRequest extends FormRequest
 			'data.type'            => ['required', 'string'],
 			'data.attributes'      => ['required', 'array'],
 			'data.relationships'   => ['sometimes', 'array', new JsonApiRelationshipsRule($this->availableRelationships, $this->route()->uri)],
-			'data.relationships.*' => ['array:data'],
+			'data.relationships.*' => ['array:data', new JsonApiSingleRelationRule($this->schema)],
 		];
 		$factory = $this->container->make(ValidationFactory::class);
 		$validator = $factory->make($this->validationData(), $rules);
