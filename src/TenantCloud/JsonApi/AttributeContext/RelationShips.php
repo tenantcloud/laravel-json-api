@@ -3,16 +3,35 @@
 namespace TenantCloud\JsonApi\AttributeContext;
 
 use Illuminate\Support\Arr;
+use TenantCloud\JsonApi\DTO\RelationshipDTO;
 
 class RelationShips
 {
 	private array $originalRelationships;
 
-	private array $validatedRelationships = [];
+	private array $parsedRelationships = [];
 
-	public function __construct(array $fields)
+	public function __construct(array $relationships)
 	{
-		$this->originalRelationships = $fields;
+		$this->originalRelationships = $relationships;
+
+		foreach ($this->originalRelationships as $key => $relationship) {
+			$item = Arr::get($relationship, 'data');
+
+			if (!$item) {
+				continue;
+			}
+
+			if (Arr::has($item, 'id') && Arr::has($item, 'type')) {
+				$this->parsedRelationships[$key] = RelationshipDTO::from($item);
+			} else {
+				$this->parsedRelationships[$key] = [];
+
+				foreach ($item as $value) {
+					$this->parsedRelationships[$key][] = RelationshipDTO::from($value);
+				}
+			}
+		}
 	}
 
 	public function original(): array
@@ -20,34 +39,18 @@ class RelationShips
 		return $this->originalRelationships;
 	}
 
-	public function validated(): array
+	public function parsed(): array
 	{
-		return $this->validatedRelationships;
-	}
-
-	public function addValidated(string $key, array $data, bool $force = false): self
-	{
-		if (!$force && in_array($key, $this->validatedRelationships, true)) {
-			return $this;
-		}
-
-		Arr::set($this->validatedRelationships, $key, $data);
-
-		return $this;
-	}
-
-	public function hasValidated(string $key): bool
-	{
-		return in_array($key, $this->validatedRelationships, true);
+		return $this->parsedRelationships;
 	}
 
 	public function getOriginalByKey(string $key): ?array
 	{
-		return Arr::get($this->originalRelationships, "{$key}.data");
+		return Arr::get($this->originalRelationships, $key);
 	}
 
-	public function getValidatedByKey(string $key): ?array
+	public function getParsedByKey(string $key): ?array
 	{
-		return Arr::get($this->validatedRelationships, "{$key}.data");
+		return Arr::get($this->parsedRelationships, $key);
 	}
 }

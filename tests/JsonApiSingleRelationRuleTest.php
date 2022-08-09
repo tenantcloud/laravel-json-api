@@ -3,9 +3,7 @@
 namespace Tests;
 
 use Illuminate\Support\Str;
-use Psr\Log\LoggerInterface;
 use TenantCloud\JsonApi\Schema\ExampleSchema;
-use TenantCloud\JsonApi\Validation\Rules\JsonApiRelationshipsRule;
 use TenantCloud\JsonApi\Validation\Rules\JsonApiSingleRelationRule;
 
 /**

@@ -78,7 +78,7 @@ abstract class JsonApiStoreUpdateRequest extends FormRequest
 			$this->failedValidation($validator);
 		}
 
-		$this->replace($this->input('data.attributes'));
+		$this->replace(array_merge($this->input('data.attributes', []), $this->input('data.relationships', [])));
 	}
 
 	private function makeContext(): self
@@ -88,7 +88,7 @@ abstract class JsonApiStoreUpdateRequest extends FormRequest
 
 		$this->context = new RequestContext(
 			$this->user(),
-			ApiRequestDTO::create()->setRelationships($this->get('relationships')),
+			ApiRequestDTO::create()->setRelationships($this->only($this->availableRelationships)),
 			$schema->getResourceType()
 		);
 

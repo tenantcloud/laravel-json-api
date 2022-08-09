@@ -3,7 +3,6 @@
 namespace TenantCloud\JsonApi\Validation\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
-use Illuminate\Support\Arr;
 use Psr\Log\LoggerInterface;
 use Tests\JsonApiRelationshipsRuleTest;
 
@@ -26,7 +25,7 @@ class JsonApiRelationshipsRule implements Rule
 
 	public function passes($attribute, $value)
 	{
-		$relationships = array_keys(Arr::get($value, 'data', []));
+		$relationships = array_keys($value);
 
 		$validatedIncludes = array_intersect($this->availableRelationships, $relationships);
 
