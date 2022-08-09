@@ -45,7 +45,7 @@ class JsonApiRelationshipsRuleTest extends TestCase
 	{
 		return validator(
 			[
-				'field' => ['data' => [$value => $value]],
+				'field' => [$value => ['data' => []]],
 			],
 			[
 				'field' => $rule,
