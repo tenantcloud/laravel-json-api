@@ -2,6 +2,7 @@
 
 namespace TenantCloud\JsonApi\AttributeContext;
 
+use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
 use TenantCloud\JsonApi\DTO\RelationshipDTO;
 
@@ -42,6 +43,29 @@ class RelationShips
 	public function parsed(): array
 	{
 		return $this->parsedRelationships;
+	}
+
+	public function parsedAsArray(): array
+	{
+		$result = [];
+
+		foreach ($this->parsedRelationships as $key => $value) {
+			if ($value instanceof Arrayable) {
+				$result[$key] = $value->toArray();
+
+				continue;
+			}
+
+			$result[$key] = [];
+
+			foreach ($value as $valueItem) {
+				if ($valueItem instanceof Arrayable) {
+					$result[$key][] = $valueItem->toArray();
+				}
+			}
+		}
+
+		return $result;
 	}
 
 	public function getOriginalByKey(string $key): ?array
