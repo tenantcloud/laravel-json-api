@@ -14,7 +14,7 @@ class JsonApiSingleRelationRuleTest extends TestCase
 	public function testSuccess(): void
 	{
 		$this->assertEmpty($this->validate(new JsonApiSingleRelationRule(ExampleSchema::class), [
-			'example_include' => ['data' => ['id' => 1, 'type' => 'example_include']],
+			'example_include' => ['data' => ['id' => '1', 'type' => 'example_include']],
 		]));
 	}
 
@@ -23,8 +23,8 @@ class JsonApiSingleRelationRuleTest extends TestCase
 		$data = [
 			'example_include' => [
 				'data' => [
-					['id' => 1, 'type' => 'example_include'],
-					['id' => 2, 'type' => 'example_include'],
+					['id' => '1', 'type' => 'example_include'],
+					['id' => '2', 'type' => 'example_include'],
 				],
 			],
 		];
@@ -71,6 +71,20 @@ class JsonApiSingleRelationRuleTest extends TestCase
 		$this->assertSame('Relationship must include \'id\' and \'type\' keys.', head($errors));
 	}
 
+	public function testIdMustBeString(): void
+	{
+		$data = [
+			'example_include' => [
+				'data' => [
+					['id' => 2, 'type' => 'example_include'],
+				],
+			],
+		];
+
+		$errors = $this->validate(new JsonApiSingleRelationRule(ExampleSchema::class), $data);
+		$this->assertSame('Relationships example_include \'id\' must be string.', head($errors));
+	}
+
 	public function testMultipleRelationPartInvalidStructure(): void
 	{
 		$data = [
@@ -91,7 +105,7 @@ class JsonApiSingleRelationRuleTest extends TestCase
 		$data = [
 			'example_include' => [
 				'data' => [
-					'id'   => 1,
+					'id'   => '1',
 					'type' => 'example_include',
 					['id'  => 2, 'type' => 'example_include'],
 				],

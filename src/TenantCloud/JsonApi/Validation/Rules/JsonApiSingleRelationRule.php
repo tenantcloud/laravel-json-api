@@ -81,6 +81,13 @@ class JsonApiSingleRelationRule implements Rule
 			return false;
 		}
 
+		if (!is_string(Arr::get($value, 'id'))) {
+			$type = $include->getResourceType();
+			$this->errorMessage = "Relationships {$relationship} 'id' must be string.";
+
+			return false;
+		}
+
 		return true;
 	}
 }
