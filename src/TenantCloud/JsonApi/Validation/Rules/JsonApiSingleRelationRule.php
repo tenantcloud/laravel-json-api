@@ -60,7 +60,7 @@ class JsonApiSingleRelationRule implements Rule
 	protected function validate(array $value, string $relationship, BaseSchema $schema): bool
 	{
 		if (!Arr::has($value, 'id') || !Arr::has($value, 'type')) {
-			$this->errorMessage = 'Relationship must include\'id\' and \'type\' keys.';
+			$this->errorMessage = 'Relationship must include \'id\' and \'type\' keys.';
 
 			return false;
 		}
