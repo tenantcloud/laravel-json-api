@@ -18,6 +18,38 @@ class JsonApiRelationshipsRuleTest extends TestCase
 		$this->assertEmpty($this->validate(new JsonApiRelationshipsRule([$relationship, Str::random(8)], $this->faker->word), $relationship));
 	}
 
+	public function testEmptyArraySuccess(): void
+	{
+		$this->assertEmpty(validator(
+			[
+				'field' => [],
+			],
+			[
+				'field' => new JsonApiRelationshipsRule([Str::random(8)], $this->faker->word),
+			]
+		)->errors()->all());
+	}
+
+	public function testEmptyArrayAndEmptyAvailableRelationshipsSuccess(): void
+	{
+		$this->assertEmpty(validator(
+			[
+				'field' => [],
+			],
+			[
+				'field' => new JsonApiRelationshipsRule([], $this->faker->word),
+			]
+		)->errors()->all());
+	}
+
+	public function testEmptyAvailableRelationshipsError(): void
+	{
+		$relationship = Str::random(10);
+
+		$errors = $this->validate(new JsonApiRelationshipsRule([], $this->faker->word), $relationship);
+		$this->assertSame("The used relationships are not valid: {$relationship}", head($errors));
+	}
+
 	public function testError(): void
 	{
 		$apiUrl = $this->faker->word;
