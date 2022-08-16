@@ -30,6 +30,11 @@ class JsonApiSingleRelationRule implements Rule
 		$relationship = Str::afterLast($attribute, '.');
 		$data = Arr::get($value, 'data');
 
+		// Allow null value for relationship.
+		if ($data === null && Arr::has($value, 'data')) {
+			return true;
+		}
+
 		if (!is_array($data)) {
 			return false;
 		}

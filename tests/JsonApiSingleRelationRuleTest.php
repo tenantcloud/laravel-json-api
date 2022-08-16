@@ -32,6 +32,17 @@ class JsonApiSingleRelationRuleTest extends TestCase
 		$this->assertEmpty($this->validate(new JsonApiSingleRelationRule(ExampleSchema::class), $data));
 	}
 
+	public function testAllowNullValueForRelation(): void
+	{
+		$data = [
+			'example_include' => [
+				'data' => null,
+			],
+		];
+
+		$this->assertEmpty($this->validate(new JsonApiSingleRelationRule(ExampleSchema::class), $data));
+	}
+
 	public function testSingleRelationInvalidStructure(): void
 	{
 		$data = [
