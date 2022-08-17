@@ -7,6 +7,8 @@ use Illuminate\Foundation\Http\FormRequest;
 use TenantCloud\JsonApi\DTO\ApiRequestDTO;
 use TenantCloud\JsonApi\Interfaces\Context;
 use TenantCloud\JsonApi\Interfaces\Schema;
+use TenantCloud\JsonApi\Validation\Rules\JsonApiRelationshipsRule;
+use TenantCloud\JsonApi\Validation\Rules\JsonApiSingleRelationRule;
 use Tests\JsonApiStoreUpdateRequestTest;
 
 /**
@@ -17,13 +19,9 @@ abstract class JsonApiStoreUpdateRequest extends FormRequest
 	/** @var Schema|string */
 	protected $schema;
 
-	private ?RequestContext $context;
+	protected array $availableRelationships = [];
 
-	private array $basicRules = [
-		'data'            => ['required', 'array'],
-		'data.type'       => ['required', 'string'],
-		'data.attributes' => ['required', 'array'],
-	];
+	private ?RequestContext $context;
 
 	public function authorizeSchema(): self
 	{
@@ -66,14 +64,21 @@ abstract class JsonApiStoreUpdateRequest extends FormRequest
 	 */
 	protected function preValidateBasic(): void
 	{
+		$rules = [
+			'data'                 => ['required', 'array'],
+			'data.type'            => ['required', 'string'],
+			'data.attributes'      => ['required', 'array'],
+			'data.relationships'   => ['sometimes', 'array', new JsonApiRelationshipsRule($this->availableRelationships, $this->route()->uri)],
+			'data.relationships.*' => ['array:data', new JsonApiSingleRelationRule($this->schema)],
+		];
 		$factory = $this->container->make(ValidationFactory::class);
-		$validator = $factory->make($this->validationData(), $this->basicRules);
+		$validator = $factory->make($this->validationData(), $rules);
 
 		if ($validator->fails()) {
 			$this->failedValidation($validator);
 		}
 
-		$this->replace($this->input('data.attributes'));
+		$this->replace(array_merge($this->input('data.attributes', []), $this->input('data.relationships', [])));
 	}
 
 	private function makeContext(): self
@@ -81,7 +86,11 @@ abstract class JsonApiStoreUpdateRequest extends FormRequest
 		/** @var Schema $schema */
 		$schema = app($this->schema);
 
-		$this->context = new RequestContext($this->user(), ApiRequestDTO::create(), $schema->getResourceType());
+		$this->context = new RequestContext(
+			$this->user(),
+			ApiRequestDTO::create()->setRelationships($this->only($this->availableRelationships)),
+			$schema->getResourceType()
+		);
 
 		return $this;
 	}
