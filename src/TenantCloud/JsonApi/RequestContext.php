@@ -6,7 +6,7 @@ use TenantCloud\JsonApi\AttributeContext\Fields;
 use TenantCloud\JsonApi\AttributeContext\Filter;
 use TenantCloud\JsonApi\AttributeContext\Includes;
 use TenantCloud\JsonApi\AttributeContext\Page;
-use TenantCloud\JsonApi\AttributeContext\RelationShips;
+use TenantCloud\JsonApi\AttributeContext\Relationships;
 use TenantCloud\JsonApi\AttributeContext\Sort;
 use TenantCloud\JsonApi\DTO\ApiRequestDTO;
 use TenantCloud\JsonApi\Interfaces\Context;
@@ -38,7 +38,7 @@ class RequestContext implements Context
 
 	protected Sort $sort;
 
-	protected RelationShips $relationships;
+	protected Relationships $relationships;
 
 	/**
 	 * @param TUser $user
@@ -53,7 +53,7 @@ class RequestContext implements Context
 		$this->page = (new Page())->setPage($params->getPage() ?? 1);
 		$this->includes = new Includes($params->getInclude() ?? []);
 		$this->fields = new Fields($params->getFields() ?? []);
-		$this->relationships = new RelationShips($params->getRelationships() ?? []);
+		$this->relationships = new Relationships($params->getRelationships() ?? []);
 	}
 
 	/**
@@ -89,7 +89,7 @@ class RequestContext implements Context
 		return $this->sort;
 	}
 
-	public function relationships(): RelationShips
+	public function relationships(): Relationships
 	{
 		return $this->relationships;
 	}

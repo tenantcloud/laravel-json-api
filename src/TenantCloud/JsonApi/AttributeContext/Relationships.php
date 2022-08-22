@@ -6,7 +6,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
 use TenantCloud\JsonApi\DTO\RelationshipDTO;
 
-class RelationShips
+class Relationships
 {
 	private array $originalRelationships;
 
