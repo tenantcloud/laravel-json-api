@@ -16,13 +16,7 @@ class RelationShips
 	{
 		$this->originalRelationships = $relationships;
 
-		foreach ($this->originalRelationships as $key => $relationship) {
-			$item = Arr::get($relationship, 'data');
-
-			if (!$item) {
-				continue;
-			}
-
+		foreach ($this->originalRelationships as $key => $item) {
 			if (Arr::has($item, 'id') && Arr::has($item, 'type')) {
 				$this->parsedRelationships[$key] = RelationshipDTO::from($item);
 			} else {
