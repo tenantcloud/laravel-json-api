@@ -68,7 +68,7 @@ abstract class JsonApiStoreUpdateRequest extends FormRequest
 		$rules = [
 			'data'                 => ['required', 'array'],
 			'data.type'            => ['required', 'string'],
-			'data.attributes'      => ['required', 'array'],
+			'data.attributes'      => ['sometimes', 'array'],
 			'data.relationships'   => ['sometimes', 'array', new JsonApiRelationshipsRule($this->availableRelationships, $this->route()->uri)],
 			'data.relationships.*' => ['array:data', new JsonApiSingleRelationRule($this->schema)],
 		];

@@ -22,11 +22,16 @@ class JsonApiStoreUpdateRequestTest extends TestCase
 		$this->testRequest = new class () extends JsonApiStoreUpdateRequest {
 			protected $schema = TestUserSchema::class;
 
+			protected array $availableRelationships = [
+				'test_include',
+			];
+
 			public function rules(): array
 			{
 				return [
-					'name'        => ['required', 'string', 'max:255'],
-					'array1.*.id' => ['nullable', 'string'],
+					'name'            => ['required', 'string', 'max:255'],
+					'array1.*.id'     => ['nullable', 'string'],
+					'test_include.id' => ['sometimes', 'required', 'numeric'],
 				];
 			}
 
@@ -47,7 +52,6 @@ class JsonApiStoreUpdateRequestTest extends TestCase
 			->assertErrors([
 				'data',
 				'data.type',
-				'data.attributes',
 			]);
 	}
 
@@ -58,6 +62,14 @@ class JsonApiStoreUpdateRequestTest extends TestCase
 				'type'       => 'string',
 				'attributes' => [
 					'name' => $this->faker->word,
+				],
+				'relationships' => [
+					'test_include' => [
+						'data' => [
+							'type' => 'include_test_schema',
+							'id'   => '123',
+						],
+					],
 				],
 			],
 		])
@@ -77,10 +89,19 @@ class JsonApiStoreUpdateRequestTest extends TestCase
 						],
 					],
 				],
+				'relationships' => [
+					'test_include' => [
+						'data' => [
+							'type' => 'include_test_schema',
+							'id'   => 'asdasd',
+						],
+					],
+				],
 			],
 		])
 			->assertErrors([
 				'array1.0.id',
+				'test_include.id',
 			]);
 	}
 
