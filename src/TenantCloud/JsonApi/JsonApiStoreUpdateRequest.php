@@ -4,6 +4,7 @@ namespace TenantCloud\JsonApi;
 
 use Illuminate\Contracts\Validation\Factory as ValidationFactory;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Arr;
 use TenantCloud\JsonApi\DTO\ApiRequestDTO;
 use TenantCloud\JsonApi\Interfaces\Context;
 use TenantCloud\JsonApi\Interfaces\Schema;
@@ -67,7 +68,7 @@ abstract class JsonApiStoreUpdateRequest extends FormRequest
 		$rules = [
 			'data'                 => ['required', 'array'],
 			'data.type'            => ['required', 'string'],
-			'data.attributes'      => ['required', 'array'],
+			'data.attributes'      => ['sometimes', 'array'],
 			'data.relationships'   => ['sometimes', 'array', new JsonApiRelationshipsRule($this->availableRelationships, $this->route()->uri)],
 			'data.relationships.*' => ['array:data', new JsonApiSingleRelationRule($this->schema)],
 		];
@@ -78,7 +79,15 @@ abstract class JsonApiStoreUpdateRequest extends FormRequest
 			$this->failedValidation($validator);
 		}
 
-		$this->replace(array_merge($this->input('data.attributes', []), $this->input('data.relationships', [])));
+		$this->replace(
+			array_merge(
+				$this->input('data.attributes', []),
+				array_map(
+					fn (array $data) => Arr::has($data, 'data') ? $data['data'] : $data,
+					$this->input('data.relationships', [])
+				)
+			)
+		);
 	}
 
 	private function makeContext(): self

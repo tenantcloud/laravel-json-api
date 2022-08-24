@@ -6,7 +6,7 @@ use Illuminate\Contracts\Support\Arrayable;
 use Illuminate\Support\Arr;
 use TenantCloud\JsonApi\DTO\RelationshipDTO;
 
-class RelationShips
+class Relationships
 {
 	private array $originalRelationships;
 
@@ -16,9 +16,7 @@ class RelationShips
 	{
 		$this->originalRelationships = $relationships;
 
-		foreach ($this->originalRelationships as $key => $relationship) {
-			$item = Arr::get($relationship, 'data');
-
+		foreach ($this->originalRelationships as $key => $item) {
 			if (!$item) {
 				continue;
 			}
