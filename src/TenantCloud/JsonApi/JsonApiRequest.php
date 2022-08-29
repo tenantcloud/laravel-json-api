@@ -26,7 +26,7 @@ abstract class JsonApiRequest extends FormRequest
 	/** @var Schema|string|null */
 	protected $schema;
 
-	private ?RequestContext $context;
+	private RequestContext $context;
 
 	public function rules(): array
 	{
@@ -55,7 +55,7 @@ abstract class JsonApiRequest extends FormRequest
 		return true;
 	}
 
-	public function context(): ?Context
+	public function context(): Context
 	{
 		return $this->context;
 	}
