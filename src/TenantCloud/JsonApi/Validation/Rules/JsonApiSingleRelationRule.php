@@ -29,9 +29,10 @@ class JsonApiSingleRelationRule implements Rule
 
 		$relationship = Str::afterLast($attribute, '.');
 		$data = Arr::get($value, 'data');
+		$isSingle = $this->isSingle($schema, $relationship);
 
 		// Allow null value for relationship.
-		if ($data === null && Arr::has($value, 'data')) {
+		if ($isSingle && $data === null && Arr::has($value, 'data')) {
 			return true;
 		}
 
@@ -39,7 +40,7 @@ class JsonApiSingleRelationRule implements Rule
 			return false;
 		}
 
-		if ($this->isSingle($data)) {
+		if ($isSingle) {
 			return $this->validate($data, $relationship, $schema);
 		}
 
@@ -57,9 +58,15 @@ class JsonApiSingleRelationRule implements Rule
 		return $this->errorMessage;
 	}
 
-	protected function isSingle($value): bool
+	protected function isSingle(BaseSchema $schema, string $relationship): bool
 	{
-		return Arr::has($value, 'id') && Arr::has($value, 'type');
+		$relation = $schema->getIncludeDefinition($relationship);
+
+		if (!$relation) {
+			return false;
+		}
+
+		return $relation->isSingle();
 	}
 
 	protected function validate(array $value, string $relationship, BaseSchema $schema): bool
