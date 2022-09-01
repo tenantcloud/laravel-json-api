@@ -76,6 +76,20 @@ class JsonApiStoreUpdateRequestTest extends TestCase
 			->assertMissingErrors();
 	}
 
+	public function testWrongRelationshipsStructure(): void
+	{
+		$this->validate([
+			'data' => [
+				'type'       => 'string',
+				'attributes' => [
+					'name' => $this->faker->word,
+					'test_include' => $this->faker->word,
+				],
+			],
+		])
+			->assertMissingErrors();
+	}
+
 	public function testInCorrectData(): void
 	{
 		$this->validate([

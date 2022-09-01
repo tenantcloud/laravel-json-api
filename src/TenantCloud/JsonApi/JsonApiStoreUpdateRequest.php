@@ -22,7 +22,7 @@ abstract class JsonApiStoreUpdateRequest extends FormRequest
 
 	protected array $availableRelationships = [];
 
-	private ?RequestContext $context;
+	private RequestContext $context;
 
 	public function authorizeSchema(): self
 	{
@@ -39,7 +39,7 @@ abstract class JsonApiStoreUpdateRequest extends FormRequest
 		return true;
 	}
 
-	public function context(): ?Context
+	public function context(): Context
 	{
 		return $this->context;
 	}
