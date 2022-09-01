@@ -17,7 +17,7 @@ class Relationships
 		$this->originalRelationships = $relationships;
 
 		foreach ($this->originalRelationships as $key => $item) {
-			if (!$item) {
+			if (!$item || !is_array($item)) {
 				continue;
 			}
 
