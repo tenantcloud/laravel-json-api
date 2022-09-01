@@ -82,7 +82,7 @@ class JsonApiStoreUpdateRequestTest extends TestCase
 			'data' => [
 				'type'       => 'string',
 				'attributes' => [
-					'name' => $this->faker->word,
+					'name'         => $this->faker->word,
 					'test_include' => $this->faker->word,
 				],
 			],
