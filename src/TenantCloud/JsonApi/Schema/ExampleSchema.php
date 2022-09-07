@@ -29,7 +29,8 @@ class ExampleSchema extends BaseSchema
 
 		// Includes
 		$this->includes = [
-			'example_include' => SchemaIncludeDefinition::create(ExampleIncludedSchema::class, true),
+			'example_single_include'   => SchemaIncludeDefinition::create(ExampleIncludedSchema::class),
+			'example_multiple_include' => SchemaIncludeDefinition::create(ExampleIncludedSchema::class, false),
 		];
 	}
 }

@@ -28,7 +28,7 @@ class SchemaIncludeDefinitionTest extends TestCase
 	public function testSetData(): void
 	{
 		$validation = true;
-		$validator = SchemaIncludeDefinition::create(TestUserSchema::class, $validation);
+		$validator = SchemaIncludeDefinition::create(TestUserSchema::class, false, $validation);
 		$schema = $validator->getSchemaClass();
 
 		$this->assertTrue($validator->getValidation());
@@ -43,5 +43,11 @@ class SchemaIncludeDefinitionTest extends TestCase
 	{
 		$this->expectException(DuplicateSchemaFieldDefinitionException::class);
 		$this->registry->register(app(DuplicateAttributesTestSchema::class));
+	}
+
+	public function testIsSingleMarker(): void
+	{
+		$validator = SchemaIncludeDefinition::create(TestUserSchema::class, false);
+		$this->assertFalse($validator->isSingle());
 	}
 }

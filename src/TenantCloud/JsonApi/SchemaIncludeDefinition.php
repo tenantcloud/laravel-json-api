@@ -20,16 +20,19 @@ class SchemaIncludeDefinition
 	/** @var callable|bool|null */
 	private $postAuthorizeUsing;
 
-	public function __construct(string $schema, $validation = null, $postAuthorizeUsing = null)
+	private bool $isSingle;
+
+	public function __construct(string $schema, bool $isSingle = true, $validation = null, $postAuthorizeUsing = null)
 	{
+		$this->isSingle = $isSingle;
 		$this->schemaClass = $schema;
 		$this->validation = $validation;
 		$this->postAuthorizeUsing = $postAuthorizeUsing;
 	}
 
-	public static function create(string $schema, $validation = null, $postAuthorizeUsing = null): self
+	public static function create(string $schema, bool $isSingle = true, $validation = null, $postAuthorizeUsing = null): self
 	{
-		return new static($schema, $validation, $postAuthorizeUsing);
+		return new static($schema, $isSingle, $validation, $postAuthorizeUsing);
 	}
 
 	public function postAuthorizeUsing(callable $postAuthorizeUsing): self
@@ -37,6 +40,11 @@ class SchemaIncludeDefinition
 		$this->postAuthorizeUsing = $postAuthorizeUsing;
 
 		return $this;
+	}
+
+	public function isSingle(): bool
+	{
+		return $this->isSingle;
 	}
 
 	public function getValidation()
