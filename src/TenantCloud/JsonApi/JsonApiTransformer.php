@@ -5,6 +5,7 @@ namespace TenantCloud\JsonApi;
 use Closure;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\ResourceInterface;
 use League\Fractal\TransformerAbstract;
 use TenantCloud\JsonApi\Exceptions\SchemaDoesNotExistException;
@@ -89,7 +90,7 @@ class JsonApiTransformer extends TransformerAbstract
 		);
 	}
 
-	public function jsonApiCollection(Model $model, string $relation, self $transformer, string $schema): ?\League\Fractal\Resource\Collection
+	public function jsonApiCollection(Model $model, string $relation, self $transformer, string $schema): ?Collection
 	{
 		if (!$model->relationLoaded($relation)) {
 			return null;
