@@ -3,7 +3,9 @@
 namespace TenantCloud\JsonApi;
 
 use Closure;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use League\Fractal\Resource\ResourceInterface;
 use League\Fractal\TransformerAbstract;
 use TenantCloud\JsonApi\Exceptions\SchemaDoesNotExistException;
 
@@ -68,6 +70,36 @@ class JsonApiTransformer extends TransformerAbstract
 		$resourceKey = $this->getCurrentScope()->getResource()->getResourceKey();
 
 		return Arr::get($this->fields, $resourceKey) ?? ['id'];
+	}
+
+	public function jsonApiItem(Model $model, string $relation, self $transformer, string $schema): ?ResourceInterface
+	{
+		if (!$model->relationLoaded($relation)) {
+			return null;
+		}
+
+		if (!$model->{$relation}) {
+			return $this->null();
+		}
+
+		return $this->item(
+			$model->{$relation},
+			$transformer->setFields($this->getFields()),
+			app($schema)->getResourceType()
+		);
+	}
+
+	public function jsonApiCollection(Model $model, string $relation, self $transformer, string $schema): ?\League\Fractal\Resource\Collection
+	{
+		if (!$model->relationLoaded($relation)) {
+			return null;
+		}
+
+		return $this->collection(
+			$model->{$relation},
+			$transformer->setFields($this->getFields()),
+			app($schema)->getResourceType()
+		);
 	}
 
 	private function transformSchemaFields($item): array
