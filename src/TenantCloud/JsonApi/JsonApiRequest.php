@@ -93,7 +93,7 @@ abstract class JsonApiRequest extends FormRequest
 
 	private function transformSorts(): void
 	{
-		$sort = explode(',', $this->get('sort', ''));
+		$sort = explode(',', $this->get('sort') ?? '');
 		$validatedSorts = [];
 
 		foreach ($sort as $value) {
