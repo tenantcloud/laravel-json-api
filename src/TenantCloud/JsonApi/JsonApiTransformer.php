@@ -15,7 +15,7 @@ class JsonApiTransformer extends TransformerAbstract
 	/** @var array<array-key, mixed> */
 	protected array $meta = [];
 
-	/** @var ?Closure(mixed):array<array-key, mixed> */
+	/** @var ?Closure($item):array<array-key, mixed> */
 	protected ?Closure $itemMetaCallback = null;
 
 	public function transform($item): array
@@ -51,7 +51,7 @@ class JsonApiTransformer extends TransformerAbstract
 	}
 
 	/**
-	 * @param callable(mixed $item):array<array-key, mixed>|null $callable
+	 * @param callable($item):array<array-key, mixed>|null $callable
 	 *
 	 * @return static
 	 */
@@ -63,7 +63,7 @@ class JsonApiTransformer extends TransformerAbstract
 	}
 
 	/**
-	 * @return callable(mixed $item):array<array-key, mixed>|null
+	 * @return callable($item):array<array-key, mixed>|null
 	 */
 	public function getItemMetaCallback(): ?callable
 	{
