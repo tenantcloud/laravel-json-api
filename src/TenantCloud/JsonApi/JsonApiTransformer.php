@@ -9,10 +9,19 @@ use TenantCloud\JsonApi\Exceptions\SchemaDoesNotExistException;
 
 class JsonApiTransformer extends TransformerAbstract
 {
+	/**
+	 * @var array<array-key, string>
+	 */
 	protected array $fields = [];
 
+	/**
+	 * @var array<array-key, mixed>
+	 */
 	protected array $meta = [];
 
+	/**
+	 * @var ?Closure(mixed $item):array<array-key, mixed>
+	 */
 	protected ?Closure $itemMetaCallback = null;
 
 	public function transform($item): array
@@ -27,6 +36,11 @@ class JsonApiTransformer extends TransformerAbstract
 		return $data;
 	}
 
+	/**
+	 * @param array<array-key, string> $fields
+	 *
+	 * @return static
+	 */
 	public function setFields(array $fields): self
 	{
 		$this->fields = $fields;
@@ -34,23 +48,37 @@ class JsonApiTransformer extends TransformerAbstract
 		return $this;
 	}
 
+	/**
+	 * @return string[]
+	 */
 	public function getFields(): array
 	{
 		return $this->fields;
 	}
 
+	/**
+	 * @param callable(mixed $item):array<array-key, mixed>|null $callable
+	 *
+	 * @return static
+	 */
 	public function setItemMetaCallback(?callable $callable): self
 	{
-		$this->itemMetaCallback = $callable;
+		$this->itemMetaCallback = is_callable($callable) ? Closure::fromCallable($callable) : null;
 
 		return $this;
 	}
 
+	/**
+	 * @return callable(mixed $item):array<array-key, mixed>|null
+	 */
 	public function getItemMetaCallback(): ?callable
 	{
 		return $this->itemMetaCallback;
 	}
 
+	/**
+	 * @return static
+	 */
 	public function setMeta(array $meta): self
 	{
 		$this->meta = $meta;
@@ -58,6 +86,9 @@ class JsonApiTransformer extends TransformerAbstract
 		return $this;
 	}
 
+	/**
+	 * @return mixed[]
+	 */
 	public function getMeta(): array
 	{
 		return $this->meta;
@@ -87,7 +118,7 @@ class JsonApiTransformer extends TransformerAbstract
 			if ($fieldDefinition) {
 				$data[$field] = $schema->getAttributeExpression($field)->getField($item);
 			} else {
-				// If in any case we dont have field definition but have key we use default extractor.
+				// If in any case we don't have field definition but have key we use default extractor.
 				$data[$field] = (new SchemaFieldDefinition($field))->getField($item);
 			}
 		}
