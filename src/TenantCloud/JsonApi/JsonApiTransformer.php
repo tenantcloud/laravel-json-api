@@ -9,19 +9,13 @@ use TenantCloud\JsonApi\Exceptions\SchemaDoesNotExistException;
 
 class JsonApiTransformer extends TransformerAbstract
 {
-	/**
-	 * @var array<array-key, string>
-	 */
+	/** @var array<array-key, string> */
 	protected array $fields = [];
 
-	/**
-	 * @var array<array-key, mixed>
-	 */
+	/** @var array<array-key, mixed> */
 	protected array $meta = [];
 
-	/**
-	 * @var ?Closure(mixed $item):array<array-key, mixed>
-	 */
+	/** @var ?Closure(mixed):array<array-key, mixed> */
 	protected ?Closure $itemMetaCallback = null;
 
 	public function transform($item): array
