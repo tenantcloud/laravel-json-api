@@ -19,9 +19,9 @@ class TestUserSchema extends BaseSchema
 		$attributes = [
 			'id',
 			'name',
-			SchemaFieldDefinition::create('bool_allowed_attribute'),
+			SchemaFieldDefinition::create('bool_allowed_attribute')->versioned(['==1.0']),
 			SchemaFieldDefinition::create('bool_banned_attribute', static fn (RequestContext $context) => false),
-			SchemaFieldDefinition::create('bool_callback_attribute', static fn (RequestContext $context) => true),
+			SchemaFieldDefinition::create('bool_callback_attribute', static fn (RequestContext $context) => true)->versioned(['==2.0']),
 		];
 		parent::__construct($attributes);
 

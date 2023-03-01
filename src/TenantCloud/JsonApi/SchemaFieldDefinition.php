@@ -3,6 +3,7 @@
 namespace TenantCloud\JsonApi;
 
 use Illuminate\Support\Arr;
+use TenantCloud\APIVersioning\Version\VersionHelper;
 use TenantCloud\JsonApi\Interfaces\Context;
 
 /**
@@ -18,11 +19,18 @@ class SchemaFieldDefinition
 
 	private string $fieldName;
 
-	public function __construct(string $fieldName, $authorizer = true, callable $fieldGetter = null)
-	{
+	private ?array $availableVersionRules;
+
+	public function __construct(
+		string $fieldName,
+		$authorizer = true,
+		callable $fieldGetter = null,
+		array $availableVersionRules = null
+	) {
 		$this->fieldName = $fieldName;
 		$this->authorizer = $authorizer;
 		$this->fieldGetter = $fieldGetter;
+		$this->availableVersionRules = $availableVersionRules;
 	}
 
 	public static function create(string $fieldName, $validator = true, callable $fieldGetter = null): self
@@ -65,6 +73,22 @@ class SchemaFieldDefinition
 		}
 
 		return $this->defaultFieldGetter($obj);
+	}
+
+	public function versioned(array $versionRules): self
+	{
+		$this->availableVersionRules = $versionRules;
+
+		return $this;
+	}
+
+	public function validateVersion(Context $context): bool
+	{
+		if (!$this->availableVersionRules || !$context->version()) {
+			return true;
+		}
+
+		return resolve(VersionHelper::class)->compareVersions($context->version(), $this->availableVersionRules);
 	}
 
 	private function defaultFieldGetter($obj)
