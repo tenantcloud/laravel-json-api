@@ -8,14 +8,15 @@
 		"tenantcloud/php-standard": "^2.0",
 		"illuminate/support": "^8.0 || ^9.0",
 		"spatie/laravel-fractal": "^5.4 || ^6.0",
-		"tenantcloud/data-transfer-objects": "^1.0"
+		"tenantcloud/data-transfer-objects": "^1.0",
+		"tenantcloud/laravel-api-versioning": "dev-alpha"
 	},
 	"require-dev": {
 		"pestphp/pest": "^1.0",
 		"phpunit/phpunit": "^9.5",
 		"orchestra/testbench": "^6.22 || ^7.0",
-		"friendsofphp/php-cs-fixer": "^2.19.0",
-		"tenantcloud/php-cs-fixer-rule-sets": "^1.2"
+		"php-cs-fixer/shim": "^3.6.0",
+		"tenantcloud/php-cs-fixer-rule-sets": "~2.0.0"
 	},
 	"conflict": {
 		"league/fractal": "<0.20"
@@ -33,6 +34,12 @@
 			"Tests\\": "tests/"
 		}
 	},
+	"repositories": [
+		{
+			"type": "git",
+			"url": "https://github.com/tenantcloud/laravel-api-versioning"
+		}
+	],
 	"scripts": {
 		"test": "./vendor/bin/pest",
 		"cs-fix": "./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix -v --show-progress=dots",

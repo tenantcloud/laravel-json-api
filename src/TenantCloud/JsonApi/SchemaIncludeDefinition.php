@@ -2,6 +2,8 @@
 
 namespace TenantCloud\JsonApi;
 
+use TenantCloud\APIVersioning\Version\VersionHelper;
+use TenantCloud\JsonApi\Interfaces\Context;
 use TenantCloud\JsonApi\Interfaces\Schema;
 use Tests\SchemaIncludeDefinitionTest;
 
@@ -22,6 +24,8 @@ class SchemaIncludeDefinition
 
 	private bool $isSingle;
 
+	private ?array $availableVersionRules = null;
+
 	public function __construct(string $schema, bool $isSingle = true, $validation = null, $postAuthorizeUsing = null)
 	{
 		$this->isSingle = $isSingle;
@@ -33,6 +37,22 @@ class SchemaIncludeDefinition
 	public static function create(string $schema, bool $isSingle = true, $validation = null, $postAuthorizeUsing = null): self
 	{
 		return new static($schema, $isSingle, $validation, $postAuthorizeUsing);
+	}
+
+	public function versioned(array $versionRules): self
+	{
+		$this->availableVersionRules = $versionRules;
+
+		return $this;
+	}
+
+	public function validateVersion(Context $context): bool
+	{
+		if (!$this->availableVersionRules || !$context->version()) {
+			return true;
+		}
+
+		return resolve(VersionHelper::class)->compareVersions($context->version(), $this->availableVersionRules);
 	}
 
 	public function postAuthorizeUsing(callable $postAuthorizeUsing): self
