@@ -120,7 +120,7 @@ abstract class BaseSchema implements Schema
 
 			foreach ($allowedAttributes as $attributeKey => $definition) {
 				/** @var SchemaFieldDefinition $definition */
-				if ($definition->authorize($context)) {
+				if ($definition->validateVersion($context) && $definition->authorize($context)) {
 					$validatedAttributes[] = $attributeKey;
 				}
 			}
@@ -188,7 +188,7 @@ abstract class BaseSchema implements Schema
 		$validation = $include->getValidation();
 		$expectation = is_callable($validation) ? $validation($context) : $validation;
 
-		if (!$expectation) {
+		if (!$expectation || !$include->validateVersion($context)) {
 			throw new IncludeDoesNotAuthorized();
 		}
 

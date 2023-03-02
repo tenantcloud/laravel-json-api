@@ -4,6 +4,7 @@ namespace Tests;
 
 use Illuminate\Foundation\Testing\WithFaker;
 use Orchestra\Testbench\TestCase as BaseTestCase;
+use TenantCloud\APIVersioning\APIVersioningServiceProvider;
 use TenantCloud\JsonApi\JsonApiServiceProvider;
 
 class TestCase extends BaseTestCase
@@ -28,6 +29,7 @@ class TestCase extends BaseTestCase
 	{
 		return [
 			JsonApiServiceProvider::class,
+			APIVersioningServiceProvider::class,
 		];
 	}
 }

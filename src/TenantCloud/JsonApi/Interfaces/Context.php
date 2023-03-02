@@ -29,4 +29,6 @@ interface Context
 	public function sort(): Sort;
 
 	public function resourceType(): ?string;
+
+	public function version(): ?string;
 }

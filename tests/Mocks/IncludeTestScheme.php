@@ -14,15 +14,16 @@ class IncludeTestScheme extends BaseSchema
 	public function __construct()
 	{
 		$attributes = [
+			'id',
 			SchemaFieldDefinition::create('bool_allowed_attribute'),
 			SchemaFieldDefinition::create('bool_banned_attribute', static fn (RequestContext $context) => false),
-			SchemaFieldDefinition::create('bool_callback_attribute', static fn (RequestContext $context) => true),
+			SchemaFieldDefinition::create('bool_callback_attribute', static fn (RequestContext $context) => true)->versioned(['==2.0']),
 		];
 		parent::__construct($attributes);
 
 		// Includes
 		$this->includes = [
-			'test_schema' => SchemaIncludeDefinition::create(TestUserSchema::class, true),
+			'test_schema' => SchemaIncludeDefinition::create(TestUserSchema::class, true, true)->versioned(['==1.0']),
 		];
 	}
 }
