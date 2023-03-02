@@ -29,7 +29,7 @@ class SchemaIncludeVersionTest extends TestCase
 		self::assertEquals(
 			[
 				'test_user',
-				'test_version_include'
+				'test_version_include',
 			],
 			$context->includes()->getValidatedIncludes()
 		);
@@ -37,6 +37,9 @@ class SchemaIncludeVersionTest extends TestCase
 
 	/**
 	 * @dataProvider versionsProvider
+	 *
+	 * @param mixed $version
+	 * @param mixed $expectedIncludes
 	 */
 	public function testExactVersion($version, $expectedIncludes): void
 	{
