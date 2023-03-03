@@ -26,11 +26,11 @@ class TestUserTransformer extends JsonApiTransformer
 
 	public function includeTestInclude($item): ?ResourceInterface
 	{
-		return $this->jsonApiItem($item, 'test_relation', $this, TestUserSchema::class);
+		return $this->modelRelationItem($item, 'test_relation', $this, TestUserSchema::class);
 	}
 
 	public function includeTestIncludeCollection($item): ?ResourceInterface
 	{
-		return $this->jsonApiCollection($item, 'test_relation_collection', $this, TestUserSchema::class);
+		return $this->modelRelationCollection($item, 'test_relation_collection', $this, TestUserSchema::class);
 	}
 }

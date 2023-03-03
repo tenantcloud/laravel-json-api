@@ -98,7 +98,7 @@ class JsonApiTransformer extends TransformerAbstract
 		return Arr::get($this->fields, $resourceKey) ?? ['id'];
 	}
 
-	public function jsonApiItem(Model $model, string $relation, self $transformer, string $schema): ?ResourceInterface
+	public function modelRelationItem(Model $model, string $relation, self $transformer, string $schema): ?ResourceInterface
 	{
 		if (!$model->relationLoaded($relation)) {
 			return null;
@@ -115,7 +115,7 @@ class JsonApiTransformer extends TransformerAbstract
 		);
 	}
 
-	public function jsonApiCollection(Model $model, string $relation, self $transformer, string $schema): ?Collection
+	public function modelRelationCollection(Model $model, string $relation, self $transformer, string $schema): ?Collection
 	{
 		if (!$model->relationLoaded($relation)) {
 			return null;
