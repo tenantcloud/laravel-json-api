@@ -5,6 +5,7 @@ namespace TenantCloud\JsonApi;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use TenantCloud\APIVersioning\Version\VersionParser;
 use TenantCloud\JsonApi\DTO\ApiRequestDTO;
 use TenantCloud\JsonApi\Interfaces\Context;
 use TenantCloud\JsonApi\Interfaces\Schema;
@@ -86,14 +87,19 @@ abstract class JsonApiRequest extends FormRequest
 		$this->transformParameters();
 		$data = ApiRequestDTO::from($this->all());
 
-		$this->context = new RequestContext($this->user(), $data, $schema->getResourceType());
+		$this->context = new RequestContext(
+			$this->user(),
+			$data,
+			$schema->getResourceType(),
+			$this->container->make(VersionParser::class)->getVersion()
+		);
 
 		return $this;
 	}
 
 	private function transformSorts(): void
 	{
-		$sort = explode(',', $this->get('sort', ''));
+		$sort = explode(',', $this->get('sort') ?? '');
 		$validatedSorts = [];
 
 		foreach ($sort as $value) {
