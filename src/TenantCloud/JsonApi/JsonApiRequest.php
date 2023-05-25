@@ -5,6 +5,7 @@ namespace TenantCloud\JsonApi;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use TenantCloud\APIVersioning\Version\RequestVersionParser;
 use TenantCloud\APIVersioning\Version\VersionParser;
 use TenantCloud\JsonApi\DTO\ApiRequestDTO;
 use TenantCloud\JsonApi\Interfaces\Context;
@@ -91,7 +92,7 @@ abstract class JsonApiRequest extends FormRequest
 			$this->user(),
 			$data,
 			$schema->getResourceType(),
-			$this->container->make(VersionParser::class)->getVersion()
+			$this->container->make(VersionParser::class)->parse(app(RequestVersionParser::class)->getVersionString($this))
 		);
 
 		return $this;

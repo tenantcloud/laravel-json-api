@@ -2,6 +2,7 @@
 
 namespace TenantCloud\JsonApi;
 
+use TenantCloud\APIVersioning\Version\Version;
 use TenantCloud\JsonApi\AttributeContext\Fields;
 use TenantCloud\JsonApi\AttributeContext\Filter;
 use TenantCloud\JsonApi\AttributeContext\Includes;
@@ -25,7 +26,7 @@ class RequestContext implements Context
 {
 	protected ?string $resourceType;
 
-	protected ?string $version;
+	protected ?Version $version;
 
 	/** @var TUser */
 	protected $user;
@@ -45,7 +46,7 @@ class RequestContext implements Context
 	/**
 	 * @param TUser $user
 	 */
-	public function __construct($user, ApiRequestDTO $params, string $resourceType = null, string $version = null)
+	public function __construct($user, ApiRequestDTO $params, string $resourceType = null, Version $version = null)
 	{
 		$this->user = $user;
 		$this->resourceType = $resourceType;
@@ -102,7 +103,7 @@ class RequestContext implements Context
 		return $this->resourceType;
 	}
 
-	public function version(): ?string
+	public function version(): ?Version
 	{
 		return $this->version;
 	}

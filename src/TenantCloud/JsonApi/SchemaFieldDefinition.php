@@ -3,7 +3,7 @@
 namespace TenantCloud\JsonApi;
 
 use Illuminate\Support\Arr;
-use TenantCloud\APIVersioning\Version\VersionHelper;
+use TenantCloud\APIVersioning\Constraint\ConstraintChecker;
 use TenantCloud\JsonApi\Interfaces\Context;
 
 /**
@@ -88,7 +88,7 @@ class SchemaFieldDefinition
 			return true;
 		}
 
-		return resolve(VersionHelper::class)->compareVersions($context->version(), $this->availableVersionRules);
+		return resolve(ConstraintChecker::class)->compareVersions($context->version(), $this->availableVersionRules);
 	}
 
 	private function defaultFieldGetter($obj)

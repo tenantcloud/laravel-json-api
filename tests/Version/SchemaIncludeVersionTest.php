@@ -4,6 +4,7 @@ namespace Tests\Version;
 
 use Generator;
 use Illuminate\Support\Arr;
+use TenantCloud\APIVersioning\Version\VersionParser;
 use TenantCloud\JsonApi\DTO\ApiRequestDTO;
 use TenantCloud\JsonApi\RequestContext;
 use Tests\Mocks\TestUser;
@@ -38,10 +39,9 @@ class SchemaIncludeVersionTest extends TestCase
 	/**
 	 * @dataProvider versionsProvider
 	 *
-	 * @param mixed $version
 	 * @param mixed $expectedIncludes
 	 */
-	public function testExactVersion($version, $expectedIncludes): void
+	public function testExactVersion(callable $versionResolver, $expectedIncludes): void
 	{
 		$user = new TestUser(1, 'name');
 
@@ -52,7 +52,7 @@ class SchemaIncludeVersionTest extends TestCase
 
 		/** @var TestVersionedItemSchema $schema */
 		$schema = app(TestVersionedItemSchema::class);
-		$context = new RequestContext($user, $data, $schema->getResourceType(), $version);
+		$context = new RequestContext($user, $data, $schema->getResourceType(), $versionResolver());
 		$schema->validate($context);
 
 		self::assertEquals(
@@ -71,12 +71,12 @@ class SchemaIncludeVersionTest extends TestCase
 
 		/** @var TestVersionedItemSchema $schema */
 		$schema = app(TestVersionedItemSchema::class);
-		$context = new RequestContext($user, $data, $schema->getResourceType(), '2.0');
+		$context = new RequestContext($user, $data, $schema->getResourceType(), app(VersionParser::class)->parse('v2.0'));
 		$schema->validate($context);
 
 		self::assertEmpty($context->includes()->getValidatedIncludes());
 
-		$context = new RequestContext($user, $data, $schema->getResourceType(), '1.0');
+		$context = new RequestContext($user, $data, $schema->getResourceType(), app(VersionParser::class)->parse('v1.0'));
 		$schema->validate($context);
 
 		self::assertEquals(['test_version_include.test_schema'], $context->includes()->getValidatedIncludes());
@@ -96,14 +96,14 @@ class SchemaIncludeVersionTest extends TestCase
 
 		/** @var TestVersionedItemSchema $schema */
 		$schema = app(TestVersionedItemSchema::class);
-		$context = new RequestContext($user, $data, $schema->getResourceType(), '1.0');
+		$context = new RequestContext($user, $data, $schema->getResourceType(), app(VersionParser::class)->parse('v1.0'));
 		$schema->validate($context);
 
 		self::assertEquals(['name', 'bool_allowed_attribute', 'id'], Arr::get($context->fields()->validated(), 'test_schema'));
 
 		/** @var TestVersionedItemSchema $schema */
 		$schema = app(TestVersionedItemSchema::class);
-		$context = new RequestContext($user, $data->setFields([]), $schema->getResourceType(), '1.0');
+		$context = new RequestContext($user, $data->setFields([]), $schema->getResourceType(), app(VersionParser::class)->parse('v1.0'));
 		$schema->validate($context);
 
 		self::assertEquals(['id', 'name', 'bool_allowed_attribute'], array_unique(Arr::get($context->fields()->validated(), 'test_schema')));
@@ -112,7 +112,7 @@ class SchemaIncludeVersionTest extends TestCase
 	public function versionsProvider(): Generator
 	{
 		yield '1.0' => [
-			'version'           => '1.0',
+			'version'           => fn ()           => app(VersionParser::class)->parse('v1.0'),
 			'expected_includes' => [
 				'test_user',
 				'test_version_include',
@@ -120,7 +120,7 @@ class SchemaIncludeVersionTest extends TestCase
 		];
 
 		yield '2.0' => [
-			'version'           => '2.0',
+			'version'           => fn ()           => app(VersionParser::class)->parse('v2.0'),
 			'expected_includes' => [
 				'test_user',
 				'test_version_include',
