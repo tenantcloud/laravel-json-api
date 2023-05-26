@@ -2,7 +2,7 @@
 
 namespace TenantCloud\JsonApi;
 
-use TenantCloud\APIVersioning\Version\VersionHelper;
+use TenantCloud\APIVersioning\Constraint\ConstraintChecker;
 use TenantCloud\JsonApi\Interfaces\Context;
 use TenantCloud\JsonApi\Interfaces\Schema;
 use Tests\SchemaIncludeDefinitionTest;
@@ -52,7 +52,7 @@ class SchemaIncludeDefinition
 			return true;
 		}
 
-		return resolve(VersionHelper::class)->compareVersions($context->version(), $this->availableVersionRules);
+		return resolve(ConstraintChecker::class)->compareVersions($context->version(), $this->availableVersionRules);
 	}
 
 	public function postAuthorizeUsing(callable $postAuthorizeUsing): self

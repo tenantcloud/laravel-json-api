@@ -4,7 +4,8 @@ namespace Tests\Version;
 
 use Generator;
 use Illuminate\Support\Arr;
-use TenantCloud\APIVersioning\Version;
+use TenantCloud\APIVersioning\Version\LatestVersion;
+use TenantCloud\APIVersioning\Version\VersionParser;
 use TenantCloud\JsonApi\DTO\ApiRequestDTO;
 use TenantCloud\JsonApi\RequestContext;
 use Tests\Mocks\TestUser;
@@ -40,10 +41,9 @@ class SchemaAttributeVersionTest extends TestCase
 	/**
 	 * @dataProvider versionProvider
 	 *
-	 * @param mixed $version
 	 * @param mixed $expectedFields
 	 */
-	public function testAllowedVersionField($version, $expectedFields): void
+	public function testAllowedVersionField(callable $versionResolver, $expectedFields): void
 	{
 		$user = new TestUser(1, 'name');
 
@@ -52,7 +52,7 @@ class SchemaAttributeVersionTest extends TestCase
 		]);
 		/** @var TestVersionedItemSchema $schema */
 		$schema = app(TestVersionedItemSchema::class);
-		$context = new RequestContext($user, $data, $schema->getResourceType(), $version);
+		$context = new RequestContext($user, $data, $schema->getResourceType(), $versionResolver());
 		$schema->validate($context);
 
 		self::assertEquals(
@@ -61,16 +61,8 @@ class SchemaAttributeVersionTest extends TestCase
 		);
 	}
 
-	/**
-	 * @dataProvider versionProvider
-	 *
-	 * @param mixed $version
-	 * @param mixed $expectedFields
-	 */
-	public function testLatestVersion($version, $expectedFields): void
+	public function testLatestVersion(): void
 	{
-		// Set current version 3.0
-		config()->set('api-versioning.latest_version', $version);
 		$user = new TestUser(1, 'name');
 
 		$data = ApiRequestDTO::create()->setFields([
@@ -78,12 +70,12 @@ class SchemaAttributeVersionTest extends TestCase
 		]);
 		/** @var TestVersionedItemSchema $schema */
 		$schema = app(TestVersionedItemSchema::class);
-		$context = new RequestContext($user, $data, $schema->getResourceType(), Version::currentLatestVersion());
+		$context = new RequestContext($user, $data, $schema->getResourceType(), new LatestVersion());
 
 		$schema->validate($context);
 
 		self::assertEquals(
-			$expectedFields,
+			['id', 'name', 'non_versioned_field', 'complex_rule_version_field'],
 			array_unique(Arr::get($context->fields()->validated(), $schema->getResourceType()))
 		);
 	}
@@ -91,17 +83,16 @@ class SchemaAttributeVersionTest extends TestCase
 	/**
 	 * @dataProvider versionProvider
 	 *
-	 * @param mixed $version
 	 * @param mixed $expectedFields
 	 */
-	public function testDefaultFieldsWithVersion($version, $expectedFields): void
+	public function testDefaultFieldsWithVersion(callable $versionResolver, $expectedFields): void
 	{
 		$user = new TestUser(1, 'name');
 
 		$data = ApiRequestDTO::create();
 		/** @var TestVersionedItemSchema $schema */
 		$schema = app(TestVersionedItemSchema::class);
-		$context = new RequestContext($user, $data, $schema->getResourceType(), $version);
+		$context = new RequestContext($user, $data, $schema->getResourceType(), $versionResolver());
 		$schema->validate($context);
 
 		self::assertEquals(
@@ -113,7 +104,7 @@ class SchemaAttributeVersionTest extends TestCase
 	public function versionProvider(): Generator
 	{
 		yield '1.0' => [
-			'version'         => '1.0',
+			'version'         => fn ()         => app(VersionParser::class)->parse('v1.0'),
 			'expected_fields' => [
 				'id',
 				'name',
@@ -124,7 +115,7 @@ class SchemaAttributeVersionTest extends TestCase
 		];
 
 		yield '2.0' => [
-			'version'         => '2.0',
+			'version'         => fn ()         => app(VersionParser::class)->parse('v2.0'),
 			'expected_fields' => [
 				'id',
 				'name',
@@ -135,7 +126,7 @@ class SchemaAttributeVersionTest extends TestCase
 		];
 
 		yield '3.0' => [
-			'version'         => '3.0',
+			'version'         => fn ()         => app(VersionParser::class)->parse('v3.0'),
 			'expected_fields' => [
 				'id',
 				'name',

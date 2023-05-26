@@ -2,6 +2,7 @@
 
 namespace TenantCloud\JsonApi\Interfaces;
 
+use TenantCloud\APIVersioning\Version\Version;
 use TenantCloud\JsonApi\AttributeContext\Fields;
 use TenantCloud\JsonApi\AttributeContext\Filter;
 use TenantCloud\JsonApi\AttributeContext\Includes;
@@ -30,5 +31,5 @@ interface Context
 
 	public function resourceType(): ?string;
 
-	public function version(): ?string;
+	public function version(): ?Version;
 }
