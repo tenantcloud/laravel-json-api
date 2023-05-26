@@ -92,7 +92,7 @@ abstract class JsonApiRequest extends FormRequest
 			$this->user(),
 			$data,
 			$schema->getResourceType(),
-			$this->container->make(VersionParser::class)->parse(app(RequestVersionParser::class)->getVersionString($this))
+			$this->container->make(VersionParser::class)->parse(app(RequestVersionParser::class)->parse($this))
 		);
 
 		return $this;
