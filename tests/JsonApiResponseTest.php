@@ -5,10 +5,13 @@ namespace Tests;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Arr;
+use TenantCloud\APIVersioning\Version\LatestVersion;
 use TenantCloud\JsonApi\DTO\ApiRequestDTO;
 use TenantCloud\JsonApi\JsonApiResponse;
 use TenantCloud\JsonApi\RequestContext;
+use Tests\Mocks\ListTestRequest;
 use Tests\Mocks\TestUser;
 use Tests\Mocks\TestUserSchema;
 use Tests\Mocks\TestUserTransformer;
@@ -124,5 +127,15 @@ class JsonApiResponseTest extends TestCase
 		$this->assertSame($user->name, Arr::get($response, 'data.0.attributes.name'));
 		$this->assertSame(1, Arr::get($response, 'meta.pagination.total'));
 		$this->assertSame('value', Arr::get($response, 'meta.key'));
+	}
+
+	public function testRequestWithLatestVersion(): void
+	{
+		$request = ListTestRequest::create('test')->setContainer(app(\Illuminate\Contracts\Container\Container::class))
+			->setRouteResolver(fn () => new Route(['POST'], '/api_config', ['/api_config']));
+
+		$request->validateResolved();
+
+		self::assertEquals(new LatestVersion(), $request->context()->version());
 	}
 }
