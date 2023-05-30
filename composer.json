@@ -9,7 +9,7 @@
 		"illuminate/support": "^8.0 || ^9.0",
 		"spatie/laravel-fractal": "^5.4 || ^6.0",
 		"tenantcloud/data-transfer-objects": "^1.0",
-		"tenantcloud/laravel-api-versioning": "dev-alpha"
+		"tenantcloud/laravel-api-versioning": "v1.0.0-alpha.1"
 	},
 	"require-dev": {
 		"pestphp/pest": "^1.0",
