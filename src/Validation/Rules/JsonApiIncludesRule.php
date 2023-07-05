@@ -4,8 +4,9 @@ namespace TenantCloud\JsonApi\Validation\Rules;
 
 use Illuminate\Contracts\Validation\Rule;
 use Psr\Log\LoggerInterface;
-use function TenantCloud\JsonApi\array_filter_empty;
 use Tests\JsonApiIncludesRuleTest;
+
+use function TenantCloud\JsonApi\array_filter_empty;
 
 /**
  * @see JsonApiIncludesRuleTest
@@ -26,7 +27,6 @@ class JsonApiIncludesRule implements Rule
 
 	/**
 	 * @param string $attribute
-	 * @param mixed  $include
 	 */
 	public function passes($attribute, $include): bool
 	{

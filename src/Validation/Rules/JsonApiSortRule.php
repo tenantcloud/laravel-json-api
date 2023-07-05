@@ -6,8 +6,9 @@ use Illuminate\Config\Repository;
 use Illuminate\Contracts\Validation\Rule;
 use Illuminate\Support\Str;
 use Psr\Log\LoggerInterface;
-use function TenantCloud\JsonApi\array_filter_empty;
 use Tests\JsonApiSortsRuleTest;
+
+use function TenantCloud\JsonApi\array_filter_empty;
 
 /**
  * @see JsonApiSortsRuleTest

@@ -14,9 +14,6 @@ use TenantCloud\JsonApi\Validation\Rules\JsonApiFieldsRule;
 use TenantCloud\JsonApi\Validation\Rules\JsonApiIncludesRule;
 use TenantCloud\JsonApi\Validation\Rules\JsonApiSortRule;
 
-/**
- * Class JsonApiRequest
- */
 abstract class JsonApiRequest extends FormRequest
 {
 	protected array $availableIncludes = [];

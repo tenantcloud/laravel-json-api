@@ -153,14 +153,9 @@ class JsonApiFieldsRuleTest extends TestCase
 		)->errors()->all();
 	}
 
-	/**
-	 * @param $obj
-	 *
-	 * @return mixed
-	 */
 	private function getNonPublicProperty($obj, string $property)
 	{
-		$ref = new ReflectionProperty(get_class($obj), $property);
+		$ref = new ReflectionProperty($obj::class, $property);
 		$ref->setAccessible(true);
 
 		return $ref->getValue($obj);

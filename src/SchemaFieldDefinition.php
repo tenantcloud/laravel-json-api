@@ -6,9 +6,6 @@ use Illuminate\Support\Arr;
 use TenantCloud\APIVersioning\Constraint\ConstraintChecker;
 use TenantCloud\JsonApi\Interfaces\Context;
 
-/**
- * Class SchemaFieldDefinition
- */
 class SchemaFieldDefinition
 {
 	/** @var callable|bool|null */

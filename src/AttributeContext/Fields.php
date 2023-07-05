@@ -6,8 +6,6 @@ use Illuminate\Support\Arr;
 use Tests\AttributeContext\FieldsTest;
 
 /**
- * Class Fields
- *
  * @see FieldsTest
  */
 class Fields

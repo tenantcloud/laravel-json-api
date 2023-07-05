@@ -8,10 +8,11 @@
 
 # Build/coverage
 /build
+/coverage
 
 # Cache
-.php_cs.cache
 .php-cs-fixer.cache
+.phpunit.cache
 **/.phpunit.result.cache
 
 # Temporary

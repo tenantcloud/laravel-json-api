@@ -138,7 +138,7 @@ class JsonApiStoreUpdateRequestTest extends TestCase
 			$validator = $exception->validator;
 		} finally {
 			if (!$validator) {
-				$ref = new ReflectionProperty(get_class($request), 'validator');
+				$ref = new ReflectionProperty($request::class, 'validator');
 				$ref->setAccessible(true);
 
 				$validator = $ref->getValue($request);

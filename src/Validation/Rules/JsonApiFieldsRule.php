@@ -27,7 +27,6 @@ class JsonApiFieldsRule implements Rule
 
 	/**
 	 * @param string $attribute
-	 * @param mixed  $fields
 	 */
 	public function passes($attribute, $fields): bool
 	{

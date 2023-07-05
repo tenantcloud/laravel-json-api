@@ -27,7 +27,6 @@ class JsonApiResponse implements Responsable
 {
 	use ForwardsCalls;
 
-	/** @var mixed */
 	protected $meta = [];
 
 	/** @var JsonApiTransformer */

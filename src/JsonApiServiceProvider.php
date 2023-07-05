@@ -9,7 +9,7 @@ class JsonApiServiceProvider extends ServiceProvider
 	public function boot()
 	{
 		$this->publishes([
-			__DIR__ . '/config/json-api.php' => config_path('json-api.php'),
+			__DIR__ . '/../resources/config/json-api.php' => config_path('json-api.php'),
 		]);
 	}
 
@@ -17,7 +17,7 @@ class JsonApiServiceProvider extends ServiceProvider
 	{
 		parent::register();
 
-		$this->mergeConfigFrom(__DIR__ . '/config/json-api.php', 'json-api');
+		$this->mergeConfigFrom(__DIR__ . '/../resources/config/json-api.php', 'json-api');
 
 		$this->app->singleton(JsonApiRegistry::class);
 	}

@@ -14,8 +14,6 @@ use TenantCloud\JsonApi\Interfaces\Context;
 use Tests\RequestContextTest;
 
 /**
- * Class RequestContext
- *
  * @see RequestContextTest
  *
  * @template-covariant TUser
