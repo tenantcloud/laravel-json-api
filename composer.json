@@ -51,13 +51,13 @@
         "phpstan": "vendor/bin/phpstan analyse --memory-limit=2G",
         "testbench": "vendor/bin/testbench"
     },
-	"minimum-stability": "alpha",
-	"prefer-stable": true,
-	"config": {
-		"allow-plugins": {
-			"pestphp/pest-plugin": true
-		}
-	},
+    "minimum-stability": "alpha",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
     "extra": {
         "laravel": {
             "providers": [
