@@ -1,60 +1,68 @@
 {
-	"name": "tenantcloud/php-json-api",
-	"description": "A template for composer packages",
-	"minimum-stability": "dev",
-	"license": "MIT",
-	"require": {
-		"php": ">=7.4 || ^8.0",
-		"tenantcloud/php-standard": "^2.0",
-		"illuminate/support": "^8.0 || ^9.0",
-		"spatie/laravel-fractal": "^5.4 || ^6.0",
-		"tenantcloud/data-transfer-objects": "^1.0",
-		"tenantcloud/laravel-api-versioning": "v1.0.0-alpha.1"
-	},
-	"require-dev": {
-		"pestphp/pest": "^1.0",
-		"phpunit/phpunit": "^9.5",
-		"orchestra/testbench": "^6.22 || ^7.0",
-		"php-cs-fixer/shim": "^3.6.0",
-		"tenantcloud/php-cs-fixer-rule-sets": "~2.0.0"
-	},
-	"conflict": {
-		"league/fractal": "<0.20"
-	},
-	"autoload": {
-		"psr-0": {
-			"": "src/"
-		},
-		"files": [
-			"src/TenantCloud/JsonApi/functions.php"
-		]
-	},
-	"autoload-dev": {
-		"psr-4": {
-			"Tests\\": "tests/"
-		}
-	},
-	"repositories": [
-		{
-			"type": "git",
-			"url": "https://github.com/tenantcloud/laravel-api-versioning"
-		}
-	],
-	"scripts": {
-		"test": "./vendor/bin/pest",
-		"cs-fix": "./tools/php-cs-fixer/vendor/bin/php-cs-fixer fix -v --show-progress=dots",
-		"phpstan":  "./tools/phpstan/vendor/bin/phpstan analyse"
-	},
-	"extra": {
-		"laravel": {
-			"providers": [
-				"TenantCloud\\JsonApi\\JsonApiServiceProvider"
-			]
-		}
-	},
-	"config": {
-		"allow-plugins": {
-			"pestphp/pest-plugin": true
-		}
-	}
+    "name": "tenantcloud/php-json-api",
+    "description": "A template for composer packages",
+    "license": "MIT",
+    "require": {
+        "php": ">=8.1",
+        "tenantcloud/php-standard": "^2.0",
+        "illuminate/support": "^9.0 || ^10.0",
+        "spatie/laravel-fractal": "^5.4 || ^6.0",
+        "tenantcloud/data-transfer-objects": "^1.0",
+        "tenantcloud/laravel-api-versioning": "v1.0.0-alpha.1 || v1.0.0-alpha.2",
+        "illuminate/contracts": "^9.0|^10.0"
+    },
+    "require-dev": {
+        "pestphp/pest": "^1.0|^2.8",
+        "orchestra/testbench": "^7.0|^8.5",
+        "php-cs-fixer/shim": "3.19.1",
+        "tenantcloud/php-cs-fixer-rule-sets": "~3.0.0",
+        "phpstan/phpstan": "~1.10.21",
+        "phpstan/phpstan-phpunit": "^1.3",
+        "phpstan/phpstan-webmozart-assert": "^1.2",
+        "phpstan/phpstan-mockery": "^1.1",
+        "nunomaduro/larastan": "^2.6"
+    },
+    "conflict": {
+        "league/fractal": "<0.20"
+    },
+    "autoload": {
+        "psr-4": {
+            "TenantCloud\\JsonApi\\": "src/"
+        },
+        "files": [
+            "src/functions.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/tenantcloud/laravel-api-versioning"
+        }
+    ],
+    "scripts": {
+        "test": "vendor/bin/pest",
+        "coverage": "XDEBUG_MODE=coverage vendor/bin/pest --coverage-html coverage",
+        "cs-fix": "vendor/bin/php-cs-fixer fix -v --show-progress=dots",
+        "phpstan": "vendor/bin/phpstan analyse --memory-limit=2G",
+        "testbench": "vendor/bin/testbench"
+    },
+    "minimum-stability": "alpha",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "TenantCloud\\JsonApi\\JsonApiServiceProvider"
+            ]
+        }
+    }
 }

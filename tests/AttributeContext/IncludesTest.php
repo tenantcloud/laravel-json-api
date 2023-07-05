@@ -6,8 +6,6 @@ use TenantCloud\JsonApi\AttributeContext\Includes;
 use Tests\TestCase;
 
 /**
- * Class IncludesTest
- *
  * @see Includes
  */
 class IncludesTest extends TestCase

@@ -2,7 +2,6 @@
 
 namespace TenantCloud\JsonApi;
 
-use Exception;
 use Illuminate\Support\Arr;
 use InvalidArgumentException;
 use TenantCloud\JsonApi\Exceptions\DuplicateSchemaFieldDefinitionException;
@@ -11,9 +10,6 @@ use TenantCloud\JsonApi\Exceptions\SchemaIncludeDoesNotExistException;
 use TenantCloud\JsonApi\Interfaces\Context;
 use TenantCloud\JsonApi\Interfaces\Schema;
 
-/**
- * Class BaseSchema
- */
 abstract class BaseSchema implements Schema
 {
 	protected string $primaryAttribute = 'id';
@@ -199,7 +195,7 @@ abstract class BaseSchema implements Schema
 
 	private function validateResourceType(): void
 	{
-		$isOk = (is_string($this->getResourceType()) === true && empty($this->getResourceType()) === false);
+		$isOk = is_string($this->getResourceType()) === true && empty($this->getResourceType()) === false;
 
 		if ($isOk === false) {
 			throw new InvalidArgumentException('Resource type is not set for Schema: ' . static::class . '.');

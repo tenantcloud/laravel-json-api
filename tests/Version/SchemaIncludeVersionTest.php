@@ -2,7 +2,6 @@
 
 namespace Tests\Version;
 
-use Generator;
 use Illuminate\Support\Arr;
 use TenantCloud\APIVersioning\Version\VersionParser;
 use TenantCloud\JsonApi\DTO\ApiRequestDTO;
@@ -37,9 +36,7 @@ class SchemaIncludeVersionTest extends TestCase
 	}
 
 	/**
-	 * @dataProvider versionsProvider
-	 *
-	 * @param mixed $expectedIncludes
+	 * @dataProvider exactVersionProvider
 	 */
 	public function testExactVersion(callable $versionResolver, $expectedIncludes): void
 	{
@@ -109,10 +106,10 @@ class SchemaIncludeVersionTest extends TestCase
 		self::assertEquals(['id', 'name', 'bool_allowed_attribute'], array_unique(Arr::get($context->fields()->validated(), 'test_schema')));
 	}
 
-	public function versionsProvider(): Generator
+	public static function exactVersionProvider(): iterable
 	{
 		yield '1.0' => [
-			'version'           => fn ()           => app(VersionParser::class)->parse('v1.0'),
+			'version'           => fn () => app(VersionParser::class)->parse('v1.0'),
 			'expected_includes' => [
 				'test_user',
 				'test_version_include',
@@ -120,7 +117,7 @@ class SchemaIncludeVersionTest extends TestCase
 		];
 
 		yield '2.0' => [
-			'version'           => fn ()           => app(VersionParser::class)->parse('v2.0'),
+			'version'           => fn () => app(VersionParser::class)->parse('v2.0'),
 			'expected_includes' => [
 				'test_user',
 				'test_version_include',

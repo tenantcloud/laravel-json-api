@@ -2,7 +2,6 @@
 
 namespace Tests\Version;
 
-use Generator;
 use Illuminate\Support\Arr;
 use TenantCloud\APIVersioning\Version\LatestVersion;
 use TenantCloud\APIVersioning\Version\VersionParser;
@@ -40,8 +39,6 @@ class SchemaAttributeVersionTest extends TestCase
 
 	/**
 	 * @dataProvider versionProvider
-	 *
-	 * @param mixed $expectedFields
 	 */
 	public function testAllowedVersionField(callable $versionResolver, $expectedFields): void
 	{
@@ -82,8 +79,6 @@ class SchemaAttributeVersionTest extends TestCase
 
 	/**
 	 * @dataProvider versionProvider
-	 *
-	 * @param mixed $expectedFields
 	 */
 	public function testDefaultFieldsWithVersion(callable $versionResolver, $expectedFields): void
 	{
@@ -101,10 +96,10 @@ class SchemaAttributeVersionTest extends TestCase
 		);
 	}
 
-	public function versionProvider(): Generator
+	public static function versionProvider(): iterable
 	{
 		yield '1.0' => [
-			'version'         => fn ()         => app(VersionParser::class)->parse('v1.0'),
+			'version'         => fn () => app(VersionParser::class)->parse('v1.0'),
 			'expected_fields' => [
 				'id',
 				'name',
@@ -115,7 +110,7 @@ class SchemaAttributeVersionTest extends TestCase
 		];
 
 		yield '2.0' => [
-			'version'         => fn ()         => app(VersionParser::class)->parse('v2.0'),
+			'version'         => fn () => app(VersionParser::class)->parse('v2.0'),
 			'expected_fields' => [
 				'id',
 				'name',
@@ -126,7 +121,7 @@ class SchemaAttributeVersionTest extends TestCase
 		];
 
 		yield '3.0' => [
-			'version'         => fn ()         => app(VersionParser::class)->parse('v3.0'),
+			'version'         => fn () => app(VersionParser::class)->parse('v3.0'),
 			'expected_fields' => [
 				'id',
 				'name',

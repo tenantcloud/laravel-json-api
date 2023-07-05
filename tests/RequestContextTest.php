@@ -9,8 +9,6 @@ use Tests\AttributeContext\PageTest;
 use Tests\Mocks\TestUser;
 
 /**
- * Class RequestContextTest
- *
  * @see RequestContext
  */
 class RequestContextTest extends TestCase
