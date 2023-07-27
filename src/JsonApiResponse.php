@@ -2,7 +2,6 @@
 
 namespace TenantCloud\JsonApi;
 
-use App\Http\Controllers\ControllerTraits\ApiTrait;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -15,7 +14,6 @@ use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
 use League\Fractal\Resource\NullResource;
-use League\Fractal\Serializer\JsonApiSerializer;
 use League\Fractal\TransformerAbstract;
 use TenantCloud\JsonApi\Interfaces\Context;
 use Tests\JsonApiResponseTest;

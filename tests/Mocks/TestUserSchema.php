@@ -25,6 +25,7 @@ class TestUserSchema extends BaseSchema
 		// Includes
 		$this->includes = [
 			'test_include' => SchemaIncludeDefinition::create(IncludeTestScheme::class, true),
+			'meta'         => SchemaIncludeDefinition::create(TestUserMetaTransformer::class, true, true),
 		];
 	}
 }
