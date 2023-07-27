@@ -28,7 +28,7 @@ class JsonApiSerializerTest extends TestCase
 		$jsonApiSchemaRegistry->register(app(TestUserMetaSchema::class));
 	}
 
-	public function testListWithMeta(): void
+	public function testSimpleListWithMeta(): void
 	{
 		$user = new TestUser(1, 'name');
 		$user2 = new TestUser(2, 'name2');
@@ -58,6 +58,53 @@ class JsonApiSerializerTest extends TestCase
 		$this->assertSame($field === 'is_valid' && $user->valid, Arr::get($response, 'data.1.meta.' . $field));
 		$this->assertArrayNotHasKey('included', $response);
 		$this->assertArrayNotHasKey('relationships', Arr::get($response, 'data.0'));
+		$this->assertSame(1, Arr::get($response, 'meta.pagination.total'));
+		$this->assertSame('value', Arr::get($response, 'meta.key'));
+	}
+
+	public function testComplexListWithMeta(): void
+	{
+		$user = new TestUser(1, 'name');
+		$user2 = new TestUser(2, 'name2');
+		$users = new LengthAwarePaginator([$user, $user2], 1, 15);
+
+		$data = ApiRequestDTO::create()
+			->setInclude(['meta', 'test_include', 'test_include_collection.meta']);
+		$type = app(TestUserSchema::class)->getResourceType();
+		$field = $this->faker->randomElement(['is_valid', 'is_invalid']);
+
+		$context = new RequestContext($user, $data, $type);
+		$context->fields()
+			->addValidated($type, ['id', 'name'])
+			->addValidated(app(TestUserMetaSchema::class)->getResourceType(), ['id', $field]);
+		$context->includes()->addValidated('meta');
+		$context->includes()->addValidated('test_include');
+		$context->includes()->addValidated('test_include_collection.meta');
+
+		$response = (new JsonApiResponse($users, new TestUserTransformer()))
+			->setContext($context)
+			->setMeta(['key' => 'value'])
+			->serialize();
+
+		$this->assertSame($type, Arr::get($response, 'data.0.type'));
+		$this->assertEquals($user->id, Arr::get($response, 'data.0.id'));
+		$this->assertSame($user->name, Arr::get($response, 'data.0.attributes.name'));
+		$this->assertSame([$field], array_keys(Arr::get($response, 'data.0.meta')));
+		$this->assertSame($field === 'is_valid' && $user->valid, Arr::get($response, 'data.0.meta.' . $field));
+		$this->assertSame($field === 'is_valid' && $user->valid, Arr::get($response, 'data.1.meta.' . $field));
+
+		$included = Arr::get($response, 'included');
+		$this->assertCount(6, $included, '4 with meta (test_include_collection) and 2 without (test_include)');
+		$this->assertCount(4, array_filter($included, fn ($item) => array_key_exists('meta', $item)));
+		$this->assertCount(
+			0,
+			array_filter($included, fn ($item) => Arr::get($item, 'type') === app(TestUserMetaSchema::class)->getResourceType())
+		);
+
+		$relationships = Arr::get($response, 'data.0.relationships');
+		$this->assertCount(2, $relationships);
+		$this->assertArrayHasKeys(['test_include', 'test_include_collection'], $relationships);
+
 		$this->assertSame(1, Arr::get($response, 'meta.pagination.total'));
 		$this->assertSame('value', Arr::get($response, 'meta.key'));
 	}
