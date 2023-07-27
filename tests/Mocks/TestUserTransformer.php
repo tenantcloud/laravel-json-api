@@ -14,6 +14,7 @@ class TestUserTransformer extends JsonApiTransformer
 	public array $availableIncludes = [
 		'test_include',
 		'test_include_collection',
+		'meta',
 	];
 
 	/**
@@ -32,5 +33,14 @@ class TestUserTransformer extends JsonApiTransformer
 	public function includeTestIncludeCollection($item): ?ResourceInterface
 	{
 		return $this->modelRelationCollection($item, 'test_relation_collection', $this, TestUserSchema::class);
+	}
+
+	public function includeMeta($item): ResourceInterface
+	{
+		return $this->item(
+			$item,
+			(new TestUserMetaTransformer())->setFields($this->getFields()),
+			app(TestUserMetaSchema::class)->getResourceType()
+		);
 	}
 }
