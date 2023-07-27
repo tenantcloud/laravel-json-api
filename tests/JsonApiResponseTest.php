@@ -9,6 +9,7 @@ use Illuminate\Routing\Route;
 use Illuminate\Support\Arr;
 use TenantCloud\APIVersioning\Version\LatestVersion;
 use TenantCloud\JsonApi\DTO\ApiRequestDTO;
+use TenantCloud\JsonApi\JsonApiRegistry;
 use TenantCloud\JsonApi\JsonApiResponse;
 use TenantCloud\JsonApi\RequestContext;
 use Tests\Mocks\ListTestRequest;
@@ -21,6 +22,14 @@ use Tests\Mocks\TestUserTransformer;
  */
 class JsonApiResponseTest extends TestCase
 {
+	protected function setUp(): void
+	{
+		parent::setUp();
+
+		$jsonApiSchemaRegistry = $this->app->make(JsonApiRegistry::class);
+		$jsonApiSchemaRegistry->register(app(TestUserSchema::class));
+	}
+
 	public function testCollection(): void
 	{
 		$user = new TestUser(1, 'name');

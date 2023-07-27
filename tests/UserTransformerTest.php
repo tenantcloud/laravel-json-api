@@ -4,7 +4,9 @@ namespace Tests;
 
 use Illuminate\Database\Eloquent\Model;
 use League\Fractal\Resource\NullResource;
+use League\Fractal\Resource\ResourceInterface;
 use Mockery;
+use Tests\Mocks\TestUserSchema;
 use Tests\Mocks\TestUserTransformer;
 
 /**
@@ -18,7 +20,17 @@ class UserTransformerTest extends TestCase
 	{
 		parent::setUp();
 
-		$this->transformer = app(TestUserTransformer::class);
+		$this->transformer = new class () extends TestUserTransformer {
+			public function includeTestInclude($item): ?ResourceInterface
+			{
+				return $this->modelRelationItem($item, 'test_relation', $this, TestUserSchema::class);
+			}
+
+			public function includeTestIncludeCollection($item): ?ResourceInterface
+			{
+				return $this->modelRelationCollection($item, 'test_relation_collection', $this, TestUserSchema::class);
+			}
+		};
 	}
 
 	public function testIncludeNotLoadedCollection(): void
