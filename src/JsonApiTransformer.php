@@ -21,6 +21,8 @@ class JsonApiTransformer extends TransformerAbstract
 	/** @var ?Closure($item):array<array-key, mixed> */
 	protected ?Closure $itemMetaCallback = null;
 
+	protected ?RequestContext $context = null;
+
 	public function transform($item): array
 	{
 		$data = $this->transformSchemaFields($item);
@@ -51,6 +53,14 @@ class JsonApiTransformer extends TransformerAbstract
 	public function getFields(): array
 	{
 		return $this->fields;
+	}
+
+	public function setContext(RequestContext $context): static
+	{
+		$this->context = $context;
+		$this->setFields($context->fields()->validated());
+
+		return $this;
 	}
 
 	/**
@@ -110,7 +120,7 @@ class JsonApiTransformer extends TransformerAbstract
 
 		return $this->item(
 			$model->{$relation},
-			$transformer->setFields($this->getFields()),
+			$transformer->setContext($this->context),
 			app($schema)->getResourceType()
 		);
 	}
@@ -123,7 +133,7 @@ class JsonApiTransformer extends TransformerAbstract
 
 		return $this->collection(
 			$model->{$relation},
-			$transformer->setFields($this->getFields()),
+			$transformer->setContext($this->context),
 			app($schema)->getResourceType()
 		);
 	}
@@ -143,10 +153,10 @@ class JsonApiTransformer extends TransformerAbstract
 			$fieldDefinition = $schema->getAttributeExpression($field);
 
 			if ($fieldDefinition) {
-				$data[$field] = $schema->getAttributeExpression($field)->getField($item);
+				$data[$field] = $schema->getAttributeExpression($field)->getField($item, $this->context);
 			} else {
 				// If in any case we don't have field definition but have key we use default extractor.
-				$data[$field] = (new SchemaFieldDefinition($field))->getField($item);
+				$data[$field] = (new SchemaFieldDefinition($field))->getField($item, $this->context);
 			}
 		}
 

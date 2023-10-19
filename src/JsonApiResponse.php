@@ -113,7 +113,6 @@ class JsonApiResponse implements Responsable
 
 	private function getTransformer(): JsonApiTransformer
 	{
-		return $this->transformer
-			->setFields($this->context->fields()->validated());
+		return $this->transformer->setContext($this->context);
 	}
 }
