@@ -39,7 +39,7 @@ class TestUserTransformer extends JsonApiTransformer
 	{
 		return $this->item(
 			$item,
-			(new TestUserMetaTransformer())->setFields($this->getFields()),
+			(new TestUserMetaTransformer())->setContext($this->context),
 			app(TestUserMetaSchema::class)->getResourceType()
 		);
 	}
