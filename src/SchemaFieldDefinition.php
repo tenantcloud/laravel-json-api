@@ -63,7 +63,7 @@ class SchemaFieldDefinition
 		return $this->authorizer;
 	}
 
-	public function getField($obj, ?RequestContext $context)
+	public function getField($obj, RequestContext $context)
 	{
 		if (is_callable($this->fieldGetter)) {
 			return ($this->fieldGetter)($obj, $context);

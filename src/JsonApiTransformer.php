@@ -21,7 +21,7 @@ class JsonApiTransformer extends TransformerAbstract
 	/** @var ?Closure($item):array<array-key, mixed> */
 	protected ?Closure $itemMetaCallback = null;
 
-	protected ?RequestContext $context = null;
+	protected RequestContext $context;
 
 	public function transform($item): array
 	{
