@@ -97,7 +97,7 @@ abstract class JsonApiRequest extends FormRequest
 
 	private function transformSorts(): void
 	{
-		$sort = explode(',', $this->get('sort') ?? '');
+		$sort = explode(',', $this->input('sort') ?? '');
 		$validatedSorts = [];
 
 		foreach ($sort as $value) {
@@ -120,7 +120,7 @@ abstract class JsonApiRequest extends FormRequest
 
 	private function transformFields(): void
 	{
-		$fields = $this->get('fields', []);
+		$fields = $this->input('fields', []);
 
 		$newFields = [];
 
@@ -149,7 +149,7 @@ abstract class JsonApiRequest extends FormRequest
 
 	private function transformInclude(): void
 	{
-		$include = explode(',', $this->get('include', '') ?? '');
+		$include = explode(',', $this->input('include', '') ?? '');
 
 		$this->merge(['include' => array_filter_empty(array_intersect($this->availableIncludes, $include))]);
 	}
