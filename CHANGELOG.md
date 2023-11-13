@@ -1,3 +1,10 @@
+# [6.1.0](https://github.com/tenantcloud/laravel-json-api/compare/v6.0.1...v6.1.0) (2023-11-13)
+
+
+### Features
+
+* Upgrade api-versioning package version. ([f4f4e52](https://github.com/tenantcloud/laravel-json-api/commit/f4f4e5205e8d8bcc6368edee18ac764b6b438657))
+
 ## [5.5.2](https://github.com/tenantcloud/laravel-json-api/compare/v5.5.1...v5.5.2) (2023-11-01)
 
 
