@@ -8,7 +8,7 @@
         "illuminate/support": "^9.0 || ^10.0",
         "spatie/laravel-fractal": "^5.4 || ^6.0",
         "tenantcloud/data-transfer-objects": "^1.0",
-        "tenantcloud/laravel-api-versioning": "v1.0.0-alpha.1 || v1.0.0-alpha.2",
+        "tenantcloud/laravel-api-versioning": "v1.0.0",
         "illuminate/contracts": "^9.0|^10.0"
     },
     "require-dev": {
