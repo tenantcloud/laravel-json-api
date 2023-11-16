@@ -5,6 +5,7 @@ namespace TenantCloud\JsonApi;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use TenantCloud\APIVersioning\Constraint\ConstraintChecker;
 use TenantCloud\APIVersioning\Version\RequestVersionParser;
 use TenantCloud\APIVersioning\Version\VersionParser;
 use TenantCloud\JsonApi\DTO\ApiRequestDTO;
@@ -57,6 +58,14 @@ abstract class JsonApiRequest extends FormRequest
 	public function context(): Context
 	{
 		return $this->context;
+	}
+
+	public function matchCurrentVersion(array $constraints): bool
+	{
+		$versionString = app(RequestVersionParser::class)->parse($this);
+		$version = app(VersionParser::class)->parse($versionString);
+
+		return app(ConstraintChecker::class)->compareVersions($version, $constraints);
 	}
 
 	protected function passedValidation(): self
