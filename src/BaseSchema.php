@@ -4,7 +4,9 @@ namespace TenantCloud\JsonApi;
 
 use Illuminate\Support\Arr;
 use InvalidArgumentException;
-use TenantCloud\JsonApi\Exceptions\DuplicateSchemaFieldDefinitionException;
+use TenantCloud\APIVersioning\Constraint\Constraint;
+use TenantCloud\APIVersioning\Constraint\ConstraintChecker;
+use TenantCloud\APIVersioning\Version\LatestVersion;
 use TenantCloud\JsonApi\Exceptions\IncludeDoesNotAuthorized;
 use TenantCloud\JsonApi\Exceptions\SchemaIncludeDoesNotExistException;
 use TenantCloud\JsonApi\Interfaces\Context;
@@ -42,9 +44,20 @@ abstract class BaseSchema implements Schema
 		return $this->attributes;
 	}
 
-	public function getAttributeExpression(string $key): ?SchemaFieldDefinition
+	public function getAttributeExpression(string $key, RequestContext $context): ?SchemaFieldDefinition
 	{
-		return Arr::get($this->attributes, $key, null);
+		return collect(Arr::get($this->attributes, $key, []))
+			->filter(fn (SchemaFieldDefinition $item) => $item->validateVersion($context))
+			->sortBy(function (SchemaFieldDefinition $item) use ($context) {
+				$version = $context->version() ?? new LatestVersion();
+				$constraints = $item->getConstraints() ?? [];
+
+				/** @var Constraint|null $matchedConstraint */
+				$matchedConstraint = app(ConstraintChecker::class)->matches($version, $constraints);
+
+				return (string) ($matchedConstraint?->version ?? 0);
+			}, SORT_DESC, true)
+			->first();
 	}
 
 	public function getIncludes(): array
@@ -114,10 +127,14 @@ abstract class BaseSchema implements Schema
 
 			$allowedAttributes = count($fields) ? Arr::only($attributes, $fields) : $attributes;
 
-			foreach ($allowedAttributes as $attributeKey => $definition) {
-				/** @var SchemaFieldDefinition $definition */
-				if ($definition->validateVersion($context) && $definition->authorize($context)) {
-					$validatedAttributes[] = $attributeKey;
+			foreach ($allowedAttributes as $attributeKey => $definitions) {
+				foreach ($definitions ?? [] as $definition) {
+					/** @var SchemaFieldDefinition $definition */
+					if ($definition->validateVersion($context) && $definition->authorize($context)) {
+						$validatedAttributes[] = $attributeKey;
+
+						break;
+					}
 				}
 			}
 
@@ -216,10 +233,10 @@ abstract class BaseSchema implements Schema
 			$field = $attribute->fieldName();
 
 			if (Arr::has($associativeAttributes, $field)) {
-				throw new DuplicateSchemaFieldDefinitionException($field, class_basename($this));
+				$associativeAttributes[$field][] = $attribute;
+			} else {
+				$associativeAttributes[$field] = [$attribute];
 			}
-
-			$associativeAttributes[$field] = $attribute;
 		}
 
 		$this->attributes = $associativeAttributes;

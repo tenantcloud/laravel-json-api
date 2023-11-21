@@ -79,6 +79,11 @@ class SchemaFieldDefinition
 		return $this;
 	}
 
+	public function getConstraints(): ?array
+	{
+		return $this->availableVersionRules;
+	}
+
 	public function validateVersion(Context $context): bool
 	{
 		if (!$this->availableVersionRules || !$context->version()) {

@@ -143,6 +143,7 @@ class JsonApiTransformer extends TransformerAbstract
 		$data = [];
 		$fields = $this->getFieldsByResourceType();
 
+		/** @var BaseSchema|null $schema */
 		$schema = app(JsonApiRegistry::class)->getSchema($this->getCurrentScope()->getResource()->getResourceKey());
 
 		if (!$schema) {
@@ -150,10 +151,10 @@ class JsonApiTransformer extends TransformerAbstract
 		}
 
 		foreach ($fields as $field) {
-			$fieldDefinition = $schema->getAttributeExpression($field);
+			$fieldDefinition = $schema->getAttributeExpression($field, $this->context);
 
 			if ($fieldDefinition) {
-				$data[$field] = $schema->getAttributeExpression($field)->getField($item, $this->context);
+				$data[$field] = $schema->getAttributeExpression($field, $this->context)->getField($item, $this->context);
 			} else {
 				// If in any case we don't have field definition but have key we use default extractor.
 				$data[$field] = (new SchemaFieldDefinition($field))->getField($item, $this->context);

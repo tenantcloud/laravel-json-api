@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Routing\Route;
 use TenantCloud\JsonApi\JsonApiRegistry;
 use Tests\Mocks\ListTestRequest;
@@ -21,7 +22,7 @@ class JsonApiRequestTest extends TestCase
 	{
 		/** @var ListTestRequest $request */
 		$request = ListTestRequest::create(uri: 'test', server: $this->transformHeadersToServerVars(['Version' => '1.0']))
-			->setContainer(app(\Illuminate\Contracts\Container\Container::class))
+			->setContainer(app(Container::class))
 			->setRouteResolver(fn () => new Route(['GET'], '/api_config', ['/api_config']));
 
 		self::assertTrue($request->matchCurrentVersion(['==1.0']));
@@ -32,7 +33,7 @@ class JsonApiRequestTest extends TestCase
 	{
 		/** @var ListTestRequest $request */
 		$request = ListTestRequest::create(uri: 'test')
-			->setContainer(app(\Illuminate\Contracts\Container\Container::class))
+			->setContainer(app(Container::class))
 			->setRouteResolver(fn () => new Route(['GET'], '/api_config', ['/api_config']));
 
 		self::assertFalse($request->matchCurrentVersion(['==1.0']));
