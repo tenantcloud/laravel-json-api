@@ -1,3 +1,11 @@
+# [6.2.0](https://github.com/tenantcloud/laravel-json-api/compare/v6.1.0...v6.2.0) (2023-11-22)
+
+
+### Features
+
+* Added matchCurrentVersion function into json api base request class. ([36a87a0](https://github.com/tenantcloud/laravel-json-api/commit/36a87a09eaa2225b0f4b263439d918a8e9f68554))
+* Improve schema attribute definitions. ([31d8a09](https://github.com/tenantcloud/laravel-json-api/commit/31d8a09bc114fa6515030920a3d0a59b86a0793e))
+
 # [6.1.0](https://github.com/tenantcloud/laravel-json-api/compare/v6.0.1...v6.1.0) (2023-11-13)
 
 
