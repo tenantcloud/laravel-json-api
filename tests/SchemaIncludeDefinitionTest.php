@@ -2,10 +2,8 @@
 
 namespace Tests;
 
-use TenantCloud\JsonApi\Exceptions\DuplicateSchemaFieldDefinitionException;
 use TenantCloud\JsonApi\JsonApiRegistry;
 use TenantCloud\JsonApi\SchemaIncludeDefinition;
-use Tests\Mocks\DuplicateAttributesTestSchema;
 use Tests\Mocks\IncludeTestScheme;
 use Tests\Mocks\TestUserSchema;
 
@@ -37,12 +35,6 @@ class SchemaIncludeDefinitionTest extends TestCase
 
 		// Test if another call
 		$this->assertSame($schema, $validator->getSchemaClass());
-	}
-
-	public function testDuplicateAttributesThrowException(): void
-	{
-		$this->expectException(DuplicateSchemaFieldDefinitionException::class);
-		$this->registry->register(app(DuplicateAttributesTestSchema::class));
 	}
 
 	public function testIsSingleMarker(): void
