@@ -9,8 +9,8 @@ jobs:
         strategy:
             fail-fast: true
             matrix:
-                php: [ 8.1, 8.2 ]
-                test-bench: [ ^7.0, ^8.0 ]
+                php: [ 8.2 ]
+                test-bench: [ ^8.0 ]
 
         steps:
             -   name: Checkout code
@@ -79,8 +79,8 @@ jobs:
         strategy:
             fail-fast: true
             matrix:
-                php: [ 8.1, 8.2 ]
-                test-bench: [ ^7.0, ^8.0 ]
+                php: [ 8.2 ]
+                test-bench: [ ^8.0 ]
         steps:
             -   name: Checkout code
                 uses: actions/checkout@v3
