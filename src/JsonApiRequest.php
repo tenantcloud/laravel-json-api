@@ -60,12 +60,12 @@ abstract class JsonApiRequest extends FormRequest
 		return $this->context;
 	}
 
+	/**
+	 * @deprecated Use versionMatches() method directly.
+	 */
 	public function matchCurrentVersion(array $constraints): bool
 	{
-		$versionString = app(RequestVersionParser::class)->parse($this);
-		$version = app(VersionParser::class)->parse($versionString);
-
-		return app(ConstraintChecker::class)->compareVersions($version, $constraints);
+		return (bool) $this->versionMatches($constraints);
 	}
 
 	protected function passedValidation(): self
