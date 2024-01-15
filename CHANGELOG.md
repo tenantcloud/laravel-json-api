@@ -1,3 +1,10 @@
+# [6.3.0](https://github.com/tenantcloud/laravel-json-api/compare/v6.2.0...v6.3.0) (2024-01-15)
+
+
+### Features
+
+* Deprecate matchCurrentVersion ([#30](https://github.com/tenantcloud/laravel-json-api/issues/30)) ([9058bdb](https://github.com/tenantcloud/laravel-json-api/commit/9058bdb7207a1eb51ee1da7d14f098de77f4a5df))
+
 # [6.2.0](https://github.com/tenantcloud/laravel-json-api/compare/v6.1.0...v6.2.0) (2023-11-22)
 
 
