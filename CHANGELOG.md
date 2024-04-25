@@ -1,3 +1,10 @@
+# [6.4.0](https://github.com/tenantcloud/laravel-json-api/compare/v6.3.0...v6.4.0) (2024-04-25)
+
+
+### Features
+
+* Template sync ([#32](https://github.com/tenantcloud/laravel-json-api/issues/32)) ([5e64bd0](https://github.com/tenantcloud/laravel-json-api/commit/5e64bd03c203f9d602d4482b5f980ef1e0b0c972)), closes [#31](https://github.com/tenantcloud/laravel-json-api/issues/31)
+
 # [6.3.0](https://github.com/tenantcloud/laravel-json-api/compare/v6.2.0...v6.3.0) (2024-01-15)
 
 
