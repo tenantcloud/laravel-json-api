@@ -36,6 +36,7 @@ abstract class JsonApiRequest extends FormRequest
 			'filter'   => ['array', 'max:50'],
 			'include'  => ['string', 'max:2000', new JsonApiIncludesRule($this->availableIncludes, $this->route()->uri)],
 			'page'     => ['integer', 'min:1'],
+			'cursor'   => ['nullable', 'string'],
 		];
 	}
 
