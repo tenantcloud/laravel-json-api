@@ -120,6 +120,7 @@ class JsonApiResponse implements Responsable
 				);
 
 				return $resource;
+
 			default:
 				return new Item($this->items, $this->getTransformer(), $this->context->resourceType());
 		}
