@@ -5,11 +5,13 @@ namespace TenantCloud\JsonApi;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\CursorPaginator;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Traits\ForwardsCalls;
 use League\Fractal\Manager;
+use League\Fractal\Pagination\Cursor;
 use League\Fractal\Pagination\IlluminatePaginatorAdapter;
 use League\Fractal\Resource\Collection;
 use League\Fractal\Resource\Item;
@@ -105,6 +107,19 @@ class JsonApiResponse implements Responsable
 				return $resource;
 			case $this->items instanceof SupportCollection:
 				return new Collection($this->items, $this->getTransformer(), $this->context->resourceType());
+			case $this->items instanceof CursorPaginator:
+				$resource = new Collection($this->items, $this->getTransformer(), $this->context->resourceType());
+
+				$resource->setCursor(
+					new Cursor(
+						$this->items->cursor()?->encode(),
+						$this->items->previousCursor()?->encode(),
+						$this->items->nextCursor()?->encode(),
+						$this->items->count()
+					)
+				);
+
+				return $resource;
 
 			default:
 				return new Item($this->items, $this->getTransformer(), $this->context->resourceType());
