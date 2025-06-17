@@ -22,10 +22,6 @@ use Tests\RequestContextTest;
  */
 class RequestContext implements Context
 {
-	protected ?string $resourceType;
-
-	protected ?Version $version;
-
 	/** @var TUser */
 	protected $user;
 
@@ -44,11 +40,13 @@ class RequestContext implements Context
 	/**
 	 * @param TUser $user
 	 */
-	public function __construct($user, ApiRequestDTO $params, string $resourceType = null, Version $version = null)
-	{
+	public function __construct(
+		$user,
+		ApiRequestDTO $params,
+		protected ?string $resourceType = null,
+		protected ?Version $version = null
+	) {
 		$this->user = $user;
-		$this->resourceType = $resourceType;
-		$this->version = $version;
 
 		$this->sort = new Sort($params->getSort() ?? []);
 		$this->filters = new Filter($params->getFilter() ?? []);

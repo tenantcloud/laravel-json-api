@@ -15,17 +15,12 @@ use function TenantCloud\JsonApi\array_filter_empty;
  */
 class JsonApiSortRule implements Rule
 {
-	private array $availableSorts;
-
-	private string $apiUrl;
-
 	private array $wrongSorts = [];
 
-	public function __construct(array $availableSorts, string $apiUrl)
-	{
-		$this->availableSorts = $availableSorts;
-		$this->apiUrl = $apiUrl;
-	}
+	public function __construct(
+		private array $availableSorts,
+		private string $apiUrl
+	) {}
 
 	/**
 	 * @param string $attribute

@@ -13,17 +13,12 @@ use function TenantCloud\JsonApi\array_filter_empty;
  */
 class JsonApiIncludesRule implements Rule
 {
-	private array $availableIncludes;
-
-	private string $apiUrl;
-
 	private array $wrongIncludes = [];
 
-	public function __construct(array $availableIncludes, string $apiUrl)
-	{
-		$this->availableIncludes = $availableIncludes;
-		$this->apiUrl = $apiUrl;
-	}
+	public function __construct(
+		private array $availableIncludes,
+		private string $apiUrl
+	) {}
 
 	/**
 	 * @param string $attribute

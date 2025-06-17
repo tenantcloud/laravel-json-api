@@ -6,15 +6,10 @@ class TestUser
 {
 	public bool $valid = true;
 
-	public int $id;
-
-	public string $name;
-
-	public function __construct(int $id, string $name)
-	{
-		$this->id = $id;
-		$this->name = $name;
-	}
+	public function __construct(
+		public int $id,
+		public string $name
+	) {}
 
 	public function isValid(): bool
 	{

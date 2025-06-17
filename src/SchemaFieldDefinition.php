@@ -14,23 +14,17 @@ class SchemaFieldDefinition
 	/** @var callable|null */
 	private $fieldGetter;
 
-	private string $fieldName;
-
-	private ?array $availableVersionRules;
-
 	public function __construct(
-		string $fieldName,
+		private string $fieldName,
 		$authorizer = true,
-		callable $fieldGetter = null,
-		array $availableVersionRules = null
+		?callable $fieldGetter = null,
+		private ?array $availableVersionRules = null
 	) {
-		$this->fieldName = $fieldName;
 		$this->authorizer = $authorizer;
 		$this->fieldGetter = $fieldGetter;
-		$this->availableVersionRules = $availableVersionRules;
 	}
 
-	public static function create(string $fieldName, $validator = true, callable $fieldGetter = null): self
+	public static function create(string $fieldName, $validator = true, ?callable $fieldGetter = null): self
 	{
 		return new static($fieldName, $validator, $fieldGetter);
 	}

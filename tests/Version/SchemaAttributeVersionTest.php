@@ -3,6 +3,7 @@
 namespace Tests\Version;
 
 use Illuminate\Support\Arr;
+use PHPUnit\Framework\Attributes\DataProvider;
 use TenantCloud\APIVersioning\Version\LatestVersion;
 use TenantCloud\APIVersioning\Version\VersionParser;
 use TenantCloud\JsonApi\DTO\ApiRequestDTO;
@@ -37,9 +38,7 @@ class SchemaAttributeVersionTest extends TestCase
 		);
 	}
 
-	/**
-	 * @dataProvider versionProvider
-	 */
+	#[DataProvider('versionProvider')]
 	public function testAllowedVersionField(callable $versionResolver, $expectedFields): void
 	{
 		$user = new TestUser(1, 'name');
@@ -77,9 +76,7 @@ class SchemaAttributeVersionTest extends TestCase
 		);
 	}
 
-	/**
-	 * @dataProvider versionProvider
-	 */
+	#[DataProvider('versionProvider')]
 	public function testDefaultFieldsWithVersion(callable $versionResolver, $expectedFields): void
 	{
 		$user = new TestUser(1, 'name');

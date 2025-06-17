@@ -12,8 +12,6 @@ use Tests\SchemaIncludeDefinitionTest;
  */
 class SchemaIncludeDefinition
 {
-	private string $schemaClass;
-
 	private ?Schema $schema = null;
 
 	/** @var callable|bool|null */
@@ -22,14 +20,14 @@ class SchemaIncludeDefinition
 	/** @var callable|bool|null */
 	private $postAuthorizeUsing;
 
-	private bool $isSingle;
-
 	private ?array $availableVersionRules = null;
 
-	public function __construct(string $schema, bool $isSingle = true, $validation = null, $postAuthorizeUsing = null)
-	{
-		$this->isSingle = $isSingle;
-		$this->schemaClass = $schema;
+	public function __construct(
+		private string $schemaClass,
+		private bool $isSingle = true,
+		$validation = null,
+		$postAuthorizeUsing = null
+	) {
 		$this->validation = $validation;
 		$this->postAuthorizeUsing = $postAuthorizeUsing;
 	}

@@ -10,12 +10,7 @@ use Tests\AttributeContext\FilterTest;
  */
 class Filter
 {
-	private array $filters;
-
-	public function __construct(array $filters = [])
-	{
-		$this->filters = $filters;
-	}
+	public function __construct(private array $filters = []) {}
 
 	public function all(): array
 	{

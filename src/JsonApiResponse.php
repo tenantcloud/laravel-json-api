@@ -29,9 +29,6 @@ class JsonApiResponse implements Responsable
 
 	protected $meta = [];
 
-	/** @var JsonApiTransformer */
-	protected $transformer;
-
 	/** @var LengthAwarePaginator|SupportCollection|null */
 	protected $items;
 
@@ -40,10 +37,12 @@ class JsonApiResponse implements Responsable
 
 	protected int $responseCode = 200;
 
-	public function __construct($items, TransformerAbstract $transformer)
-	{
+	public function __construct(
+		$items,
+		/** @var JsonApiTransformer */
+		protected TransformerAbstract $transformer
+	) {
 		$this->items = $items;
-		$this->transformer = $transformer;
 	}
 
 	/**

@@ -137,7 +137,7 @@ class JsonApiFieldsRuleTest extends TestCase
 		$this->assertSame(["The requested schema not valid: {$wrongSchema}"], $errors);
 	}
 
-	private function validate(JsonApiFieldsRule $rule, string $value, string $schema = null): array
+	private function validate(JsonApiFieldsRule $rule, string $value, ?string $schema = null): array
 	{
 		$schema ??= $this->getNonPublicProperty(resolve(TestUserSchema::class), 'resourceType');
 

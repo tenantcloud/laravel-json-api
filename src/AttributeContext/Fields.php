@@ -10,14 +10,9 @@ use Tests\AttributeContext\FieldsTest;
  */
 class Fields
 {
-	private array $originalFields;
-
 	private array $validatedFields = [];
 
-	public function __construct(array $fields)
-	{
-		$this->originalFields = $fields;
-	}
+	public function __construct(private array $originalFields) {}
 
 	public function addValidated(string $key, array $data): self
 	{

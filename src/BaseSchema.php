@@ -229,7 +229,7 @@ abstract class BaseSchema implements Schema
 				$attribute = SchemaFieldDefinition::create($attribute);
 			}
 
-			/* @var SchemaFieldDefinition $attribute */
+			/** @var SchemaFieldDefinition $attribute */
 			$field = $attribute->fieldName();
 
 			if (Arr::has($associativeAttributes, $field)) {
