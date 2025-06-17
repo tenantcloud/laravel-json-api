@@ -1,3 +1,12 @@
+## [6.4.3](https://github.com/tenantcloud/laravel-json-api/compare/v6.4.2...v6.4.3) (2025-06-17)
+
+
+### Bug Fixes
+
+* Fixed code style | TECHX-7952 #time 2m ([c2d6fdd](https://github.com/tenantcloud/laravel-json-api/commit/c2d6fddf7ad4e7800fc4eb10b401017ea2f3b13a))
+* Fixed code style | TECHX-7952 #time 2m ([d22cac8](https://github.com/tenantcloud/laravel-json-api/commit/d22cac89e7f1712b64c0eab4dbd49116418a7e1a))
+* Fixed code style | TECHX-7952 #time 2m ([4e9e3ff](https://github.com/tenantcloud/laravel-json-api/commit/4e9e3ffacb6ef8b7206190a5082f5e8227dc1919))
+
 # [6.4.0](https://github.com/tenantcloud/laravel-json-api/compare/v6.3.0...v6.4.0) (2024-04-25)
 
 
