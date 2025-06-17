@@ -2,12 +2,7 @@
 	"repositories": [
 		{
 			"url": "https://github.com/tenantcloud/laravel-package-skeleton",
-			"branch": "sync",
-			"after": {
-				"plugins": [
-					".github/template-sync/override-cs-fixer-version.js"
-				]
-			}
+			"branch": "sync"
 		}
 	]
 }

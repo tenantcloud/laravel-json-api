@@ -9,14 +9,9 @@ use Tests\AttributeContext\IncludesTest;
  */
 class Includes
 {
-	private array $originalIncludes;
-
 	private array $validatedIncludes = [];
 
-	public function __construct(array $includes = [])
-	{
-		$this->originalIncludes = $includes;
-	}
+	public function __construct(private array $originalIncludes = []) {}
 
 	public function all(): array
 	{

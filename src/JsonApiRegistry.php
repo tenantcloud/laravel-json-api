@@ -6,7 +6,7 @@ use Illuminate\Support\Arr;
 
 class JsonApiRegistry
 {
-	/** @var BaseSchema[] */
+	/** @var list<BaseSchema> */
 	protected array $schemas = [];
 
 	public function register(BaseSchema $schema): self

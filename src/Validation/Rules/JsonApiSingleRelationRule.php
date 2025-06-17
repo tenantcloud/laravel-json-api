@@ -13,14 +13,9 @@ use Tests\JsonApiSingleRelationRuleTest;
  */
 class JsonApiSingleRelationRule implements Rule
 {
-	private string $schemaClass;
-
 	private string $errorMessage = 'Relationship structure is invalid.';
 
-	public function __construct(string $schemaClass)
-	{
-		$this->schemaClass = $schemaClass;
-	}
+	public function __construct(private string $schemaClass) {}
 
 	public function passes($attribute, $value)
 	{

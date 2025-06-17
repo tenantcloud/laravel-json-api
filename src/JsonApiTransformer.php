@@ -48,7 +48,7 @@ class JsonApiTransformer extends TransformerAbstract
 	}
 
 	/**
-	 * @return string[]
+	 * @return list<string>
 	 */
 	public function getFields(): array
 	{
@@ -64,8 +64,6 @@ class JsonApiTransformer extends TransformerAbstract
 	}
 
 	/**
-	 * @param callable($item):array<array-key, mixed>|null $callable
-	 *
 	 * @return static
 	 */
 	public function setItemMetaCallback(?callable $callable): self
@@ -94,7 +92,7 @@ class JsonApiTransformer extends TransformerAbstract
 	}
 
 	/**
-	 * @return mixed[]
+	 * @return list<mixed>
 	 */
 	public function getMeta(): array
 	{

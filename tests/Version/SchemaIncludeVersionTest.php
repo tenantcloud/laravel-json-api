@@ -3,6 +3,7 @@
 namespace Tests\Version;
 
 use Illuminate\Support\Arr;
+use PHPUnit\Framework\Attributes\DataProvider;
 use TenantCloud\APIVersioning\Version\VersionParser;
 use TenantCloud\JsonApi\DTO\ApiRequestDTO;
 use TenantCloud\JsonApi\RequestContext;
@@ -35,9 +36,7 @@ class SchemaIncludeVersionTest extends TestCase
 		);
 	}
 
-	/**
-	 * @dataProvider exactVersionProvider
-	 */
+	#[DataProvider('exactVersionProvider')]
 	public function testExactVersion(callable $versionResolver, $expectedIncludes): void
 	{
 		$user = new TestUser(1, 'name');

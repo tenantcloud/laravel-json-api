@@ -11,17 +11,12 @@ use Tests\JsonApiRelationshipsRuleTest;
  */
 class JsonApiRelationshipsRule implements Rule
 {
-	private array $availableRelationships;
-
 	private ?array $wrongRelationships = [];
 
-	private string $apiUrl;
-
-	public function __construct(array $availableRelationships, string $apiUrl)
-	{
-		$this->availableRelationships = $availableRelationships;
-		$this->apiUrl = $apiUrl;
-	}
+	public function __construct(
+		private array $availableRelationships,
+		private string $apiUrl
+	) {}
 
 	public function passes($attribute, $value)
 	{

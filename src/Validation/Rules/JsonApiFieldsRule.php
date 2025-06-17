@@ -14,16 +14,11 @@ use Tests\JsonApiFieldsRuleTest;
  */
 class JsonApiFieldsRule implements Rule
 {
-	private string $apiUrl;
-
 	private array $wrongFields = [];
 
 	private string $errorType = '';
 
-	public function __construct(string $apiUrl)
-	{
-		$this->apiUrl = $apiUrl;
-	}
+	public function __construct(private string $apiUrl) {}
 
 	/**
 	 * @param string $attribute

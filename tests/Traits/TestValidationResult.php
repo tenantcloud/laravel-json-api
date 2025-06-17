@@ -13,12 +13,7 @@ use Illuminate\Testing\TestResponse;
  */
 class TestValidationResult
 {
-	private Validator $result;
-
-	public function __construct(Validator $result)
-	{
-		$this->result = $result;
-	}
+	public function __construct(private Validator $result) {}
 
 	/**
 	 * Same thing as {@see TestResponse::assertJsonValidationErrors()},

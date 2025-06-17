@@ -2,6 +2,7 @@
 
 namespace Tests;
 
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Pagination\Cursor;
@@ -238,7 +239,7 @@ class JsonApiResponseTest extends TestCase
 
 	public function testRequestWithLatestVersion(): void
 	{
-		$request = ListTestRequest::create('test')->setContainer(app(\Illuminate\Contracts\Container\Container::class))
+		$request = ListTestRequest::create('test')->setContainer(app(Container::class))
 			->setRouteResolver(fn () => new Route(['POST'], '/api_config', ['/api_config']));
 
 		$request->validateResolved();

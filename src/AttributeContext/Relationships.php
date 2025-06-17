@@ -8,14 +8,10 @@ use TenantCloud\JsonApi\DTO\RelationshipDTO;
 
 class Relationships
 {
-	private array $originalRelationships;
-
 	private array $parsedRelationships = [];
 
-	public function __construct(array $relationships)
+	public function __construct(private array $originalRelationships)
 	{
-		$this->originalRelationships = $relationships;
-
 		foreach ($this->originalRelationships as $key => $item) {
 			if (!$item || !is_array($item)) {
 				continue;
