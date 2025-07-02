@@ -7,7 +7,7 @@
 		"tenantcloud/php-standard": "^2.0",
 		"illuminate/support": "^9.0|^10.0|^11.0||^12.0",
 		"spatie/laravel-fractal": "^5.4 || ^6.0",
-		"tenantcloud/data-transfer-objects": "^1.0",
+		"tenantcloud/data-transfer-objects": "^1.0|^2.0",
 		"tenantcloud/laravel-api-versioning": "^1.1|^2.0",
 		"illuminate/contracts": "^10.0|^11.0|^12.0"
 	},
