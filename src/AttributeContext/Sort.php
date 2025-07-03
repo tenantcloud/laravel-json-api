@@ -26,7 +26,7 @@ class Sort
 		foreach ($sortParams as $sortParam) {
 			$order = Str::startsWith($sortParam, '-') ? SortType::DESC : SortType::ASC;
 
-			$sort[ltrim($sortParam, '-')] = $order;
+			$sort[mb_ltrim($sortParam, '-')] = $order;
 		}
 
 		$this->sort = $sort;
