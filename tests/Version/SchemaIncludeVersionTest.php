@@ -108,16 +108,16 @@ class SchemaIncludeVersionTest extends TestCase
 	public static function exactVersionProvider(): iterable
 	{
 		yield '1.0' => [
-			'version'           => fn () => app(VersionParser::class)->parse('v1.0'),
-			'expected_includes' => [
+			fn () => app(VersionParser::class)->parse('v1.0'),
+			[
 				'test_user',
 				'test_version_include',
 			],
 		];
 
 		yield '2.0' => [
-			'version'           => fn () => app(VersionParser::class)->parse('v2.0'),
-			'expected_includes' => [
+			fn () => app(VersionParser::class)->parse('v2.0'),
+			[
 				'test_user',
 				'test_version_include',
 			],

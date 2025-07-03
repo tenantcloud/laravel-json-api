@@ -96,8 +96,8 @@ class SchemaAttributeVersionTest extends TestCase
 	public static function versionProvider(): iterable
 	{
 		yield '1.0' => [
-			'version'         => fn () => app(VersionParser::class)->parse('v1.0'),
-			'expected_fields' => [
+			fn () => app(VersionParser::class)->parse('v1.0'),
+			[
 				'id',
 				'name',
 				'non_versioned_field',
@@ -107,8 +107,8 @@ class SchemaAttributeVersionTest extends TestCase
 		];
 
 		yield '2.0' => [
-			'version'         => fn () => app(VersionParser::class)->parse('v2.0'),
-			'expected_fields' => [
+			fn () => app(VersionParser::class)->parse('v2.0'),
+			[
 				'id',
 				'name',
 				'non_versioned_field',
@@ -118,8 +118,8 @@ class SchemaAttributeVersionTest extends TestCase
 		];
 
 		yield '3.0' => [
-			'version'         => fn () => app(VersionParser::class)->parse('v3.0'),
-			'expected_fields' => [
+			fn () => app(VersionParser::class)->parse('v3.0'),
+			[
 				'id',
 				'name',
 				'non_versioned_field',
