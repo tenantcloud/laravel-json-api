@@ -5,6 +5,7 @@ namespace TenantCloud\JsonApi;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use TenantCloud\APIVersioning\Constraint\Constraint;
 use TenantCloud\APIVersioning\Version\RequestVersionParser;
 use TenantCloud\APIVersioning\Version\VersionParser;
 use TenantCloud\JsonApi\DTO\ApiRequestDTO;
@@ -14,6 +15,9 @@ use TenantCloud\JsonApi\Validation\Rules\JsonApiFieldsRule;
 use TenantCloud\JsonApi\Validation\Rules\JsonApiIncludesRule;
 use TenantCloud\JsonApi\Validation\Rules\JsonApiSortRule;
 
+/**
+ * @method Constraint|null versionMatches(string|array $constraints) Registered as a Request macro by laravel-api-versioning.
+ */
 abstract class JsonApiRequest extends FormRequest
 {
 	protected array $availableIncludes = [];
@@ -38,6 +42,13 @@ abstract class JsonApiRequest extends FormRequest
 			'page'     => ['integer', 'min:1'],
 			'cursor'   => ['nullable', 'string'],
 		];
+	}
+
+	public function validateResolved(): void
+	{
+		$this->normalizeFilters();
+
+		parent::validateResolved();
 	}
 
 	public function authorizeSchema(): self
@@ -138,6 +149,21 @@ abstract class JsonApiRequest extends FormRequest
 		}
 
 		$this->merge(['fields' => $newFields]);
+	}
+
+	/**
+	 * filter[a.b]=x and filter[a][b]=x must be the same thing for validation rules,
+	 * prepareForValidation() of child requests and the resulting context.
+	 */
+	private function normalizeFilters(): void
+	{
+		$filter = $this->input('filter');
+
+		if (!is_array($filter)) {
+			return;
+		}
+
+		$this->merge(['filter' => Arr::undot(Arr::dot($filter))]);
 	}
 
 	private function transformFilters(): void
