@@ -1,3 +1,10 @@
+## [7.0.2](https://github.com/tenantcloud/laravel-json-api/compare/v7.0.1...v7.0.2) (2026-10-21)
+
+
+### Bug Fixes
+
+* Normalize filters in every request bag | tVCM93Y9 ([#44](https://github.com/tenantcloud/laravel-json-api/issues/44)) ([1a2438f](https://github.com/tenantcloud/laravel-json-api/commit/1a2438f77b610af39fe14151f1c232a2cb2d8f73))
+
 ## [7.0.1](https://github.com/tenantcloud/laravel-json-api/compare/v7.0.0...v7.0.1) (2026-10-21)
 
 
