@@ -2,7 +2,6 @@
 
 namespace Tests\Mocks;
 
-use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 use TenantCloud\JsonApi\JsonApiRequest;
 
@@ -30,6 +29,9 @@ class FilterTestRequest extends JsonApiRequest
 
 	protected function prepareForValidation(): void
 	{
-		$this->filterBeforeValidation = Arr::get($this->all(), 'filter');
+		// Same as child requests in apps: read the filter with get() and merge it back.
+		$this->filterBeforeValidation = $this->get('filter');
+
+		$this->merge(['filter' => $this->filterBeforeValidation]);
 	}
 }

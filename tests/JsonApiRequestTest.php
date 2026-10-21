@@ -3,10 +3,12 @@
 namespace Tests;
 
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\Routing\Route;
 use Illuminate\Validation\ValidationException;
 use PHPUnit\Framework\Attributes\DataProvider;
+use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 use TenantCloud\JsonApi\JsonApiRegistry;
 use Tests\Mocks\FilterTestRequest;
 use Tests\Mocks\ListTestRequest;
@@ -47,15 +49,17 @@ class JsonApiRequestTest extends TestCase
 
 	public static function filterFormsProvider(): iterable
 	{
-		yield 'nested' => [fn (string $value) => ['lease' => ['expires_in' => $value]]];
+		foreach (['query' => false, 'json body' => true] as $source => $json) {
+			yield "nested in {$source}" => [fn (string $value) => ['lease' => ['expires_in' => $value]], $json];
 
-		yield 'dotted' => [fn (string $value) => ['lease.expires_in' => $value]];
+			yield "dotted in {$source}" => [fn (string $value) => ['lease.expires_in' => $value], $json];
+		}
 	}
 
 	#[DataProvider('filterFormsProvider')]
-	public function testDottedAndNestedFiltersAreTheSame(callable $filter): void
+	public function testDottedAndNestedFiltersAreTheSame(callable $filter, bool $json): void
 	{
-		$request = $this->makeFilterRequest($filter('30_days'));
+		$request = $this->makeFilterRequest($filter('30_days'), $json);
 
 		$request->validateResolved();
 
@@ -64,9 +68,9 @@ class JsonApiRequestTest extends TestCase
 	}
 
 	#[DataProvider('filterFormsProvider')]
-	public function testDottedAndNestedFiltersAreValidated(callable $filter): void
+	public function testDottedAndNestedFiltersAreValidated(callable $filter, bool $json): void
 	{
-		$request = $this->makeFilterRequest($filter('90'));
+		$request = $this->makeFilterRequest($filter('90'), $json);
 
 		try {
 			$request->validateResolved();
@@ -77,9 +81,14 @@ class JsonApiRequestTest extends TestCase
 		}
 	}
 
-	private function makeFilterRequest(array $filter): FilterTestRequest
+	private function makeFilterRequest(array $filter, bool $json): FilterTestRequest
 	{
-		return FilterTestRequest::create(uri: 'test', parameters: ['filter' => $filter])
+		// Built from a base request the same way Laravel resolves form requests.
+		$baseRequest = Request::createFromBase($json ?
+			SymfonyRequest::create(uri: 'test', server: ['CONTENT_TYPE' => 'application/json'], content: json_encode(['filter' => $filter])) :
+			SymfonyRequest::create(uri: 'test', parameters: ['filter' => $filter]));
+
+		return FilterTestRequest::createFrom($baseRequest)
 			->setContainer(app(Container::class))
 			->setRedirector(app(Redirector::class))
 			->setRouteResolver(fn () => new Route(['GET'], '/api_config', ['/api_config']));
