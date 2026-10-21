@@ -5,6 +5,7 @@ namespace TenantCloud\JsonApi;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use TenantCloud\APIVersioning\Constraint\Constraint;
 use TenantCloud\APIVersioning\Version\RequestVersionParser;
 use TenantCloud\APIVersioning\Version\VersionParser;
 use TenantCloud\JsonApi\DTO\ApiRequestDTO;
@@ -14,6 +15,9 @@ use TenantCloud\JsonApi\Validation\Rules\JsonApiFieldsRule;
 use TenantCloud\JsonApi\Validation\Rules\JsonApiIncludesRule;
 use TenantCloud\JsonApi\Validation\Rules\JsonApiSortRule;
 
+/**
+ * @method Constraint|null versionMatches(string|array $constraints) Registered as a Request macro by laravel-api-versioning.
+ */
 abstract class JsonApiRequest extends FormRequest
 {
 	protected array $availableIncludes = [];

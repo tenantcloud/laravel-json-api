@@ -118,7 +118,7 @@ class JsonApiSingleRelationRuleTest extends TestCase
 				'data' => [
 					'id'   => '1',
 					'type' => 'example_include',
-					['id'  => 2, 'type' => 'example_include'],
+					['id' => 2, 'type' => 'example_include'],
 				],
 			],
 		];
@@ -131,7 +131,7 @@ class JsonApiSingleRelationRuleTest extends TestCase
 		$data = [
 			'example_multiple_include' => [
 				'data' => [
-					'id'  => 1,
+					'id' => 1,
 					['id' => 2, 'type' => 'example_include'],
 				],
 			],
