@@ -154,16 +154,25 @@ abstract class JsonApiRequest extends FormRequest
 	/**
 	 * filter[a.b]=x and filter[a][b]=x must be the same thing for validation rules,
 	 * prepareForValidation() of child requests and the resulting context.
+	 *
+	 * Every bag is normalized, not only the input source: for JSON requests get() reads
+	 * the request bag, which is a copy of the JSON bag that merge() writes to.
 	 */
 	private function normalizeFilters(): void
 	{
-		$filter = $this->input('filter');
+		$bags = [$this->query, $this->request];
 
-		if (!is_array($filter)) {
-			return;
+		if ($this->isJson()) {
+			$bags[] = $this->json();
 		}
 
-		$this->merge(['filter' => Arr::undot(Arr::dot($filter))]);
+		foreach ($bags as $bag) {
+			$filter = $bag->all()['filter'] ?? null;
+
+			if (is_array($filter)) {
+				$bag->set('filter', Arr::undot(Arr::dot($filter)));
+			}
+		}
 	}
 
 	private function transformFilters(): void
