@@ -40,6 +40,13 @@ abstract class JsonApiRequest extends FormRequest
 		];
 	}
 
+	public function validateResolved(): void
+	{
+		$this->normalizeFilters();
+
+		parent::validateResolved();
+	}
+
 	public function authorizeSchema(): self
 	{
 		/** @var Schema $schema */
@@ -138,6 +145,21 @@ abstract class JsonApiRequest extends FormRequest
 		}
 
 		$this->merge(['fields' => $newFields]);
+	}
+
+	/**
+	 * filter[a.b]=x and filter[a][b]=x must be the same thing for validation rules,
+	 * prepareForValidation() of child requests and the resulting context.
+	 */
+	private function normalizeFilters(): void
+	{
+		$filter = $this->input('filter');
+
+		if (!is_array($filter)) {
+			return;
+		}
+
+		$this->merge(['filter' => Arr::undot(Arr::dot($filter))]);
 	}
 
 	private function transformFilters(): void
