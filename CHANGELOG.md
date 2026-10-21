@@ -1,3 +1,10 @@
+## [7.0.1](https://github.com/tenantcloud/laravel-json-api/compare/v7.0.0...v7.0.1) (2026-10-21)
+
+
+### Bug Fixes
+
+* Normalize dotted filter keys before validation | tVCM93Y9 ([#43](https://github.com/tenantcloud/laravel-json-api/issues/43)) ([e367795](https://github.com/tenantcloud/laravel-json-api/commit/e3677953b042d3963a77332b0852547bebfd5025))
+
 ## [6.4.3](https://github.com/tenantcloud/laravel-json-api/compare/v6.4.2...v6.4.3) (2025-06-17)
 
 
