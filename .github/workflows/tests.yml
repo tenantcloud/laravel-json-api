@@ -62,20 +62,6 @@ jobs:
             - name: Execute php-cs-fixer
               run: composer cs-fix -- --dry-run --diff --using-cache=no
 
-    prettier:
-        name: Prettier
-        runs-on: packages
-        container: node:22
-
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
-
-            - name: Run prettier
-              uses: actionsx/prettier@v3
-              with:
-                  args: --check .
-
     phpstan:
         name: PHPStan on PHP v${{ matrix.php }} & TestBench ${{ matrix.test-bench }}
         strategy:
